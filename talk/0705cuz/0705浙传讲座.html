@@ -1,0 +1,3491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>人工智能技术与产业融合发展现状——AI浪潮下传媒行业发展态势</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg: #f8f9fb;
+      --surface: #ffffff;
+      --surface2: #eef0f3;
+      --primary: #D44D67;
+      --primary-rgb: 212, 77, 103;
+      --primary2: #8B4555;
+      --primary2-rgb: 139, 69, 85;
+      --accent: #b45309;
+      --accent-rgb: 180, 83, 9;
+      --text: #1e293b;
+      --text2: #64748b;
+      --green: #059669;
+      --green-rgb: 5, 150, 105;
+      --red: #dc2626;
+      --yellow: #d97706;
+      --yellow-rgb: 217, 119, 6;
+      --border: rgba(0,0,0,0.08);
+      --glow: 0 2px 12px rgba(212,77,103,0.1);
+      --radius: 10px;
+      --pad: 44px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      font-family: 'Noto Sans SC', sans-serif;
+      background: #e2e5ea;
+      color: var(--text);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    canvas#bgCanvas {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
+    }
+    #slides-container {
+      width: 1280px;
+      height: 960px;
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 4px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .slide {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0; left: 0;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--pad);
+      z-index: 1;
+      background: var(--bg);
+      overflow-y: auto;
+    }
+    .slide.active { display: flex; }
+    .flex-center { align-items: center; justify-content: center; text-align: center; }
+    .slide-number {
+      font-size: 0.85rem; color: var(--text2);
+      font-family: 'JetBrains Mono', monospace;
+      z-index: 10;
+      padding: 7px 20px;
+      border: 1px solid rgba(212,77,103,0.25);
+      border-radius: 20px;
+      background: rgba(212,77,103,0.04);
+      color: var(--primary);
+      cursor: default;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 80px;
+    }
+    .nav-container {
+      position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 10px; z-index: 10;
+    }
+    .nav-buttons {
+      display: flex; gap: 12px;
+    }
+    .chapter-nav {
+      display: flex; gap: 6px; align-items: center;
+    }
+    .chapter-dot {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: rgba(212,77,103,0.1); border: 1px solid rgba(212,77,103,0.3);
+      color: var(--primary); font-size: 0.6rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.3s; font-family: 'JetBrains Mono', monospace;
+    }
+    .chapter-dot:hover { background: rgba(212,77,103,0.2); border-color: var(--primary); transform: scale(1.1); }
+    .chapter-dot.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .nav-btn {
+      padding: 7px 20px;
+      border: 1px solid rgba(212,77,103,0.25);
+      border-radius: 20px;
+      background: rgba(212,77,103,0.04);
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+    }
+    .nav-btn:hover { background: rgba(212,77,103,0.1); border-color: var(--primary); }
+
+    h1 { font-size: 2.8rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 16px; line-height: 1.2; }
+    h2 { font-size: 2.0rem; font-weight: 700; margin-bottom: 14px; }
+    h3 { font-size: 1.5rem; font-weight: 600; }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--primary), #A33B50);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-header {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
+    }
+    .section-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--primary), rgba(212,77,103,0.05));
+    }
+    .section-label {
+      color: var(--primary); font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.1em;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: all 0.3s;
+    }
+    .card:hover { border-color: rgba(212,77,103,0.2); box-shadow: var(--glow); }
+    .card-glow {
+      background: linear-gradient(135deg, rgba(212,77,103,0.03), rgba(107,30,46,0.02));
+      border: 1px solid rgba(212,77,103,0.12);
+    }
+
+    .data-badge {
+      display: inline-block; padding: 5px 14px;
+      background: rgba(212,77,103,0.06); border: 1px solid rgba(212,77,103,0.15);
+      border-radius: 20px; font-size: 0.8rem; color: var(--primary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .data-highlight {
+      font-size: 2.4rem; font-weight: 900;
+      color: var(--primary);
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+    .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+    .grid-5 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 12px; }
+
+    .timeline { display: flex; align-items: center; gap: 0; }
+    .timeline-step {
+      flex: 1; text-align: center; position: relative; padding: 20px 10px;
+    }
+    .timeline-step::after {
+      content: ''; position: absolute; top: 50%; right: -12px; width: 24px; height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--primary2));
+    }
+    .timeline-step:last-child::after { display: none; }
+    .timeline-dot {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px; font-weight: 700; font-size: 1.1rem;
+      color: #fff;
+    }
+
+    .bar-chart { display: flex; align-items: flex-end; gap: 20px; height: 160px; padding: 20px 0; }
+    .bar-item { flex: 1; text-align: center; }
+    .bar {
+      width: 100%; border-radius: 6px 6px 0 0;
+      background: linear-gradient(180deg, var(--primary), rgba(212,77,103,0.3));
+      margin: 0 auto 8px; transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 0;
+    }
+    .bar.animate {
+      height: var(--target-height);
+      min-height: 4px;
+    }
+    .bar.accent { background: linear-gradient(180deg, var(--primary2), rgba(107,30,46,0.3)); }
+    .bar.green { background: linear-gradient(180deg, var(--green), rgba(5,150,105,0.3)); }
+    .bar.purple { background: linear-gradient(180deg, var(--primary2), rgba(107,30,46,0.3)); }
+
+    .image-grid { display: grid; gap: 16px; }
+    .image-grid img {
+      width: 100%; border-radius: 10px;
+      border: 1px solid var(--border);
+      transition: transform 0.3s;
+    }
+    .image-grid img:hover { transform: scale(1.02); }
+
+    .progress-bar {
+      height: 8px; background: rgba(0,0,0,0.04); border-radius: 4px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--primary), var(--primary2));
+      width: 0;
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .progress-fill.animate {
+      width: var(--target-width);
+    }
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(212,77,103,0.04), rgba(107,30,46,0.03));
+      border-left: 3px solid var(--primary); padding: 16px 20px; border-radius: 0 8px 8px 0;
+    }
+
+    .source-tag {
+      font-size: 0.7rem; color: var(--text2);
+      font-family: 'JetBrains Mono', monospace; opacity: 0.7;
+    }
+
+    .arrow-right { color: var(--primary); margin: 0 8px; }
+
+    .concept-box {
+      border: 1px solid rgba(212,77,103,0.15);
+      border-radius: 8px;
+      padding: 10px 14px;
+      text-align: center;
+      background: rgba(212,77,103,0.03);
+      transition: all 0.3s;
+      font-size: 0.9rem;
+    }
+    .concept-box:hover { border-color: var(--primary); box-shadow: var(--glow); }
+    .concept-box .cn { font-weight: 700; margin-bottom: 3px; }
+    .concept-box .en { font-size: 0.7rem; opacity: 0.5; font-family: 'JetBrains Mono', monospace; }
+    .concept-box .desc { font-size: 0.7rem; opacity: 0.55; margin-top: 3px; line-height: 1.4; }
+
+    .layer-label {
+      writing-mode: vertical-lr;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      padding: 8px 6px;
+      border-radius: 4px;
+      text-align: center;
+      min-width: 28px;
+    }
+
+    .connector-v { width: 2px; background: linear-gradient(180deg, var(--primary), var(--primary2)); margin: 0 auto; }
+    .connector-h { height: 2px; background: linear-gradient(90deg, var(--primary), var(--primary2)); flex: 1; }
+
+    .clickable { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+    .clickable:hover { transform: scale(1.02); box-shadow: 0 4px 20px rgba(212,77,103,0.15); }
+
+    #fullscreen-modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.88); z-index: 9999;
+      display: none; justify-content: center; align-items: center;
+      cursor: zoom-out;
+    }
+    #fullscreen-modal.active { display: flex; }
+    #fullscreen-modal .modal-content {
+      width: min(90vw, calc(90vh * 4 / 3));
+      height: min(90vh, calc(90vw * 3 / 4));
+      overflow: auto;
+      background: var(--bg); border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+      position: relative;
+      cursor: zoom-out;
+    }
+    #fullscreen-modal .modal-content > * { cursor: auto; }
+    #fullscreen-modal .img-wrapper {
+      display: flex; justify-content: center; align-items: center;
+      width: 100%; height: 100%;
+    }
+    #fullscreen-modal .img-wrapper img {
+      max-width: 92%; max-height: 92%; border-radius: 8px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+      cursor: zoom-out;
+    }
+    #fullscreen-modal .close-btn {
+      position: absolute; top: 12px; right: 20px;
+      font-size: 2rem; color: var(--text); cursor: pointer;
+      opacity: 0.6; transition: opacity 0.2s; z-index: 10;
+      line-height: 1;
+    }
+    #fullscreen-modal .close-btn:hover { opacity: 1; }
+    
+    .chart-bar {
+      height: 16px;
+      border-radius: 8px;
+      width: 0;
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .chart-bar.animate {
+      width: var(--target-width);
+    }
+    .concept-box-animate {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .concept-box-animate.animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  
+  </style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div id="fullscreen-modal">
+  <span class="close-btn">×</span>
+  <div class="modal-content" id="modal-inner"></div>
+</div>
+<div id="slides-container">
+  <div class="slide active flex-center" id="s1">
+    <div style="position:relative; z-index: 1;">
+      <div class="data-badge" style="margin-bottom: 20px; font-size: 0.8rem;">LECTURE · 2026</div>
+      <h1 style="font-size: 2.6rem; margin-bottom: 12px; line-height: 1.2;">人工智能技术与产业融合发展现状</h1>
+      <p style="font-size: 1.15rem; color: var(--text2); margin-bottom: 40px; max-width: 700px; line-height: 1.6;">AI浪潮下传媒行业发展态势——从Token经济到智媒转型</p>
+      <div style="margin-top: 40px; color: var(--text2); font-size: 1.15rem; line-height: 1.8;">
+        媒体工程学院  张赟<br>2026年7月5日
+      </div>
+    </div>
+    <img src="logo.png" style="position:absolute; top:24px; right:24px; width:280px; height:auto; z-index:2; opacity:0.9;" alt="logo">
+  </div>
+  <div class="slide" id="s2">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">CONTENTS</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px;">讲座导览</h2>
+    <p style="color: var(--text2); margin-bottom: 32px; font-size: 0.95rem; line-height: 1.6;">本讲座共分为七个章节，系统梳理AI技术基础、产业格局、传媒行业融合实践与AI案例专题</p>
+    <div class="grid-3" style="margin-top: 16px; gap: 14px;">
+      <div class="card" style="border-left: 3px solid var(--primary); padding-left: 16px;">
+        <div style="font-size: 1.6rem; font-weight: 900; color: var(--primary); margin-bottom: 8px;">01</div>
+        <div style="font-weight: 600; margin-bottom: 6px; font-size: 1rem;">AI基础概念：从Token到算力</div>
+        <div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">用生活化的比喻，拆解人工智能的核心术语</div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--primary); padding-left: 16px;">
+        <div style="font-size: 1.6rem; font-weight: 900; color: var(--primary); margin-bottom: 8px;">02</div>
+        <div style="font-weight: 600; margin-bottom: 6px; font-size: 1rem;">国内大模型生态格局</div>
+        <div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">2026年最新版"百模大战"全景图</div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--primary); padding-left: 16px;">
+        <div style="font-size: 1.6rem; font-weight: 900; color: var(--primary); margin-bottom: 8px;">03</div>
+        <div style="font-weight: 600; margin-bottom: 6px; font-size: 1rem;">Token经济：商业模式与成本逻辑</div>
+        <div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">从"算力消耗"到"Token结算"的价值重构</div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--primary); padding-left: 16px;">
+        <div style="font-size: 1.6rem; font-weight: 900; color: var(--primary); margin-bottom: 8px;">04</div>
+        <div style="font-weight: 600; margin-bottom: 6px; font-size: 1rem;">AI浪潮下传媒行业变革</div>
+        <div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">从内容生产到传播分发的全链路重塑</div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--primary); padding-left: 16px;">
+        <div style="font-size: 1.6rem; font-weight: 900; color: var(--primary); margin-bottom: 8px;">05</div>
+        <div style="font-weight: 600; margin-bottom: 6px; font-size: 1rem;">出版行业的AI应用实践</div>
+        <div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">从图书编辑到知识服务的全链路升级</div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--primary); padding-left: 16px;">
+        <div style="font-size: 1.6rem; font-weight: 900; color: var(--primary); margin-bottom: 8px;">06</div>
+        <div style="font-weight: 600; margin-bottom: 6px; font-size: 1rem;">从业者的机遇与挑战</div>
+        <div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">传媒人如何在AI时代保持不可替代性</div>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--primary); padding-left: 16px;">
+        <div style="font-size: 1.6rem; font-weight: 900; color: var(--primary); margin-bottom: 8px;">07</div>
+        <div style="font-weight: 600; margin-bottom: 6px; font-size: 1rem;">AI案例专题：意图即代码</div>
+        <div style="color: var(--text2); font-size: 0.95rem; line-height: 1.5;">非技术者的AI协作共创与验证方法</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide flex-center" id="s3">
+    <div class="data-badge" style="margin-bottom: 24px;">CHAPTER 01</div>
+    <h1 style="font-size: 2.4rem; margin-bottom: 16px; line-height: 1.2;">01 AI基础概念：从Token到算力</h1>
+    <p style="color: var(--text2); font-size: 1.15rem; max-width: 600px; line-height: 1.6;">用生活化的比喻，拆解人工智能的核心术语。在深入行业应用之前，先用简单易懂的类比讲清大模型、Token、Agent、算力等概念，为零技术背景的从业者扫清认知障碍。</p>
+  </div>
+  <div class="slide" id="s4">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">大模型：一个读过全人类图书馆的"超级实习</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">大模型：一个读过全人类图书馆的"超级实习生"</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">核心类比：大模型就像一个"超级实习生"——读过海量文本，能回答问题、写文章、做翻译，但也会犯错。GPT-4、文心一言是典型代表。</p>
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">能做什么</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+<ul style="margin: 0; padding-left: 18px; color: var(--text2); font-size: 1.05rem; line-height: 1.5;">
+          <li style="margin-bottom: 4px;">回答问题：从专业知识到日常咨询，覆盖多领域</li>
+          <li style="margin-bottom: 4px;">写文章：新闻稿、报告、创意文案，支持多种风格</li>
+          <li style="margin-bottom: 4px;">做翻译：多语言互译与本地化，支持100+语言</li>
+          <li style="margin-bottom: 4px;">总结长文档：快速提取要点、生成结构化摘要</li>
+          <li style="margin-bottom: 4px;">写代码：编程辅助、调试与算法优化</li>
+          <li style="margin-bottom: 4px;">逻辑推理：数学计算、逻辑推理与数据分析</li>
+          <li style="margin-bottom: 4px;">典型代表：GPT-4（1.8万亿参数）、文心一言</li>
+        </ul>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">能力边界</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+<ul style="margin: 0; padding-left: 18px; color: var(--text2); font-size: 1.05rem; line-height: 1.5;">
+          <li style="margin-bottom: 4px;">无法保证100%准确：可能产生"幻觉"信息</li>
+          <li style="margin-bottom: 4px;">不理解物理世界：缺乏常识与感知能力</li>
+          <li style="margin-bottom: 4px;">知识有截止日期：训练数据非实时更新</li>
+          <li style="margin-bottom: 4px;">无法自主判断价值：需要人工审核把关</li>
+          <li style="margin-bottom: 4px;">缺乏情感和创造力：深度创作仍受限</li>
+          <li style="margin-bottom: 4px;">不懂因果关系：统计关联≠真实理解</li>
+          <li style="margin-bottom: 4px;">关键原则：AI生成内容必须经过人工审核</li>
+        </ul>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">大模型是"读得多"而非"想得深"——在信息检索和模式匹配上远超人类，但在原创思考、价值判断和情感表达上仍有根本局限。传媒人应将其视为工具，而非替代方案。</div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      • 回答问题：从专业知识到日常咨询，覆盖多领域
+• 写文章：新闻稿、报告、创意文案，支持多种风格
+• 做翻译：多语言互译与本地化，支持100+语言
+• 总结长文档：快速提取要点、生成结构化摘要
+• 写代码：编程辅助、调试与算法优化
+• 逻辑推理：数学计算、逻辑推理与数据分析
+典型代表：GPT-4（1.8万亿参数）、文心一言
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：Business Research Insights AIGC市场报告</div>
+  </div>
+  <div class="slide" id="s5">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">Token：AI世界的"最小信息积木"</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">Token：AI世界的"最小信息积木"</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">核心类比：Token就像乐高积木——大模型处理信息时，把文字拆成一块块"积木"，每块就是一个Token。1个汉字约等于1-2个Token。</p>
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">Token拆解示例</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">原句："人工智能正在改变世界"<br>Token拆分：<br>• 人工智能 → 1个Token<br>• 正在 → 1个Token<br>• 改变 → 1个Token<br>• 世界 → 1个Token<br>总计：4个Token（约4个汉字）</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">Token计费逻辑</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">计费公式：</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">总费用 = (输入Token + 输出Token) × 单价<br>示例：<br>• 输入100字 ≈ 130 Token<br>• 输出200字 ≈ 70 Token<br>• GPT-3.5级别：约$0.0004<br>关键认知：Token数量直接影响API调用成本</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">Token是AI时代的"价值锚点"——它不仅决定调用成本，更成为衡量模型能力、计算资源消耗和商业模式的核心单位。掌握Token逻辑，是理解AI经济的第一步。</div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      计费公式：
+总费用 = (输入Token + 输出Token) × 单价
+示例：
+• 输入100字 ≈ 130 Token
+• 输出200字 ≈ 70 Token
+• GPT-3.5级别：约$0.0004
+关键认知：Token数量直接影响API调用成本
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：虎嗅《Token经济学》</div>
+  </div>
+  <div class="slide" id="s6">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">Agent与算力：AI的"手脚"与"大脑</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">Agent与算力：AI的"手脚"与"大脑燃料"</h2>
+    
+    <div class="grid-2" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">Agent：AI的"手脚"</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">能自主执行任务的"机器人助理"<br>Agent不仅能回答问题，还能：<br>• 调用工具、搜索网页、操作软件<br>• 根据目标自主规划执行步骤<br>• 连接大模型与外部世界的桥梁<br>典型实例：<br>• AutoGPT：自动分解任务并执行<br>• 阿里通义千问：Agent模式调用插件<br>• 百度文心：多工具协同完成任务</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">算力：AI的"大脑燃料"</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">没有GPU，大模型就像没有电的电脑<br>GPU是AI训练和推理的核心硬件：<br>• 算力成本占AI公司总成本60%+<br>• 阿里云、华为云布局智算中心<br>• 国产芯片：华为昇腾、寒武纪<br>关键数据：<br>• OpenAI 2025年算力成本160亿美元<br>• DeepSeek-V3训练仅557万美元<br>• 推理成本正超过训练成本</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">Agent让大模型从"能说话"变成"能做事"，算力则是这一切的底层支撑。没有算力，Agent就是无源之水；没有Agent，算力就是无的放矢。</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;"></div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      GPU是AI训练和推理的核心硬件：
+• 算力成本占AI公司总成本60%+
+• 阿里云、华为云布局智算中心
+• 国产芯片：华为昇腾、寒武纪
+关键数据：
+• OpenAI 2025年算力成本160亿美元
+• DeepSeek-V3训练仅557万美元
+• 推理成本正超过训练成本
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：虎嗅《AI基础设施观察》</div>
+  </div>
+  <div class="slide" id="s7">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">AIGC技术架构：三层金字塔模型</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">AIGC技术架构：三层金字塔模型</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">AIGC产业形成三层金字塔架构，从基础设施到用户产品，中国企业均有代表性布局。</p>
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">应用层：面向用户的具体产品</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">ChatGPT、豆包、文心一言等对话产品<br>Midjourney、可灵AI等图像视频工具<br>Suno、Udio等音乐生成应用</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">中间层：垂直工具与平台</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">可灵AI：全球用户2200万，视频生成份额超30%<br>Midjourney：AI图像生成标杆产品<br>Suno：文本生成音乐，降低创作门槛</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">基础层：大模型训练与算力基础设施</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">百度文心：中文理解能力领先，日均调用量超10亿<br>阿里通义：开源模型Qwen系列全球下载量第一<br>DeepSeek：开源策略，模型能力接近GPT-4</div>
+      </div>
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：东方财富AIGC产业研究报告</div>
+  </div>
+  <div class="slide" id="s8">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">中国AI发展时间线：从跟跑到并跑</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">中国AI发展时间线：从跟跑到并跑</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">中国AI大模型仅用两年时间，完成从跟跑到并跑、再到部分领跑的跨越式发展。</p>
+    <div class="timeline" style="margin-top: 20px;">
+      <div class="timeline-step">
+        <div class="timeline-dot">2022</div>
+        <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;">2022.11</div>
+        <div style="font-size: 0.8rem; color: var(--text2); line-height: 1.4;"></div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot">2023</div>
+        <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;">2023.03</div>
+        <div style="font-size: 0.8rem; color: var(--text2); line-height: 1.4;"></div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot">2024</div>
+        <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;">2024.05</div>
+        <div style="font-size: 0.8rem; color: var(--text2); line-height: 1.4;"></div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot">2025</div>
+        <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;">2025年</div>
+        <div style="font-size: 0.8rem; color: var(--text2); line-height: 1.4;"></div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot">2026</div>
+        <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;">2026年</div>
+        <div style="font-size: 0.8rem; color: var(--text2); line-height: 1.4;"></div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      关键洞察：两年间，中国AI大模型从跟跑到并跑，再到部分领域领跑。2025年日均Token调用量突破100万亿，2026年国产模型周处理Token量达12.96万亿，超越美国的3.03万亿。
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：虎嗅、新浪财经</div>
+  </div>
+  <div class="slide flex-center" id="s9">
+    <div class="data-badge" style="margin-bottom: 24px;">CHAPTER 02</div>
+    <h1 style="font-size: 2.4rem; margin-bottom: 16px; line-height: 1.2;">02 国内大模型生态格局</h1>
+    <p style="color: var(--text2); font-size: 1.15rem; max-width: 600px; line-height: 1.6;">2026年最新版"百模大战"全景图。拆解中国大模型市场的竞争格局，从一线巨头到独立新锐，从模型能力到商业模式，帮助从业者理解技术供给端的现状。</p>
+  </div>
+  <div class="slide" id="s10">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">"百模大战"后的格局分化：三大阵营</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">"百模大战"后的格局分化：三大阵营</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">中国大模型市场分化为三大阵营，各阵营基于不同资源禀赋形成差异化竞争策略。</p>
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">一线巨头</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">全能全域，全栈AI能力<br>• 字节豆包：全能型对话AI，网感任务突出<br>• 阿里通义：Qwen3-Omni登顶全球开源榜<br>• 百度文心：中文理解领先，降价40%<br>• 腾讯混元：依托微信生态差异化<br>核心特征<br>覆盖C端和B端，全栈布局</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">顶尖独立</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">技术专精，单点突破<br>• Kimi：长文本处理能力行业领先<br>• DeepSeek：开源+低成本颠覆市场<br>• 智谱AI：学术评测技术实力强劲<br>核心特征<br>聚焦技术深度，单点突破</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">垂类龙头</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">行业深耕，场景落地<br>• 讯飞星火：教育、医疗垂直深耕<br>• 华为盘古：政企行业解决方案<br>• 垂类优势：行业知识+场景深度<br>核心特征<br>聚焦特定行业，建立壁垒</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">三大阵营并非泾渭分明，巨头也在布局垂类，独立厂商寻求生态合作，竞争格局仍在快速演变。</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;"></div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      • 字节豆包：全能型对话AI，网感任务突出
+• 阿里通义：Qwen3-Omni登顶全球开源榜
+• 百度文心：中文理解领先，降价40%
+• 腾讯混元：依托微信生态差异化
+核心特征
+覆盖C端和B端，全栈布局
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：新浪新闻</div>
+  </div>
+  <div class="slide" id="s11">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">头部厂商动态：Kimi、豆包、元宝三足鼎</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">头部厂商动态：Kimi、豆包、元宝三足鼎立</h2>
+    
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">评测要点</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">Kimi：1124分综合排名第一，长文本处理能力领先<br>豆包：1096分，网感类任务和娱乐场景表现突出<br>元宝：1074分，依托微信生态实现差异化竞争<br>阿里通义：Qwen3-Omni登顶全球开源模型榜单<br>百度文心：4.5宣布降价40%，加速市场渗透<br>智谱AI：在学术评测中保持技术领先</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">2026年5月最新评测显示，Kimi、豆包、元宝三足鼎立格局初现。各厂商差异化竞争策略明显：Kimi长于长文本，豆包强于网感，元宝依托微信生态。</div>
+      </div>
+    </div>
+    <div style="margin-top: 20px; text-align: center;">
+      <img src="charts/chart_11.png" style="max-width: 90%; max-height: 260px; border-radius: 8px; border: 1px solid var(--border);" alt="chart">
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：PHP中文网、Toolifies</div>
+  </div>
+  <div class="slide" id="s12">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">DeepSeek现象：开源策略如何颠覆市</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">DeepSeek现象：开源策略如何颠覆市场</h2>
+    
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">DeepSeek：开源颠覆者</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">以开源+低成本策略引发全球震动的中国AI黑马</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+<ul style="margin: 0; padding-left: 18px; color: var(--text2); font-size: 1.05rem; line-height: 1.5;">
+          <li style="margin-bottom: 4px;">DeepSeek-V2发布于2024年5月，引发国内大模型价格战</li>
+          <li style="margin-bottom: 4px;">模型能力接近GPT-4，成本仅为其1/10</li>
+          <li style="margin-bottom: 4px;">开源策略让全球开发者免费使用顶尖模型</li>
+          <li style="margin-bottom: 4px;">DeepSeek-R1推理模型在数学、编程任务表现优异</li>
+          <li style="margin-bottom: 4px;">成为全球开发者下载量第三的AI应用</li>
+          <li style="margin-bottom: 4px;">核心影响：</li>
+          <li style="margin-bottom: 4px;">迫使闭源厂商调整定价策略，</li>
+          <li style="margin-bottom: 4px;">开源模式重塑全球AI竞争格局</li>
+        </ul>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">关键洞察</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">DeepSeek以开源+低成本策略颠覆市场，训练成本仅为GPT-4的1/10，成为全球开发者下载量第三的AI应用。开源模式正在重塑全球AI竞争格局。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">DeepSeek证明了中国AI不仅在应用层创新，在基础模型层面同样具备全球竞争力。开源策略正在打破美国的技术垄断预期。</div>
+      </div>
+    </div>
+    <div style="margin-top: 20px; text-align: center;">
+      <img src="charts/chart_12.png" style="max-width: 90%; max-height: 260px; border-radius: 8px; border: 1px solid var(--border);" alt="chart">
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      • DeepSeek-V2发布于2024年5月，引发国内大模型价格战
+• 模型能力接近GPT-4，成本仅为其1/10
+• 开源策略让全球开发者免费使用顶尖模型
+• DeepSeek-R1推理模型在数学、编程任务表现优异
+• 成为全球开发者下载量第三的AI应用
+核心影响：
+迫使闭源厂商调整定价策略，
+开源模式重塑全球AI竞争格局
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：虎嗅、今日头条</div>
+  </div>
+  <div class="slide" id="s13">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">2026年大模型价格战：免费额度持续扩大</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">2026年大模型价格战：免费额度持续扩大</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">国内大模型价格持续下探，与国际厂商对比，国产模型在价格上竞争力显著。</p>
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">价格战三大趋势</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">趋势一：免费额度持续扩大。豆包Lite、Qwen3-Turbo完全免费，文心4.5每月赠送100万Token<br>趋势二：国产价格仅为国际1/10。GPT-4o输入$5/百万Token，国产模型普遍低于$0.5<br>趋势三：盈利模式仍待探索。OpenAI每赚1美元净亏0.6美元，国内厂商同样面临盈利压力</div>
+      </div>
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：freeaitool.com LLM价格对比</div>
+  </div>
+  <div class="slide" id="s14">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">大模型厂商的商业模式：订阅、API、生态</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">大模型厂商的商业模式：订阅、API、生态</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">三大商业模式并行发展，但盈利压力持续存在，行业仍在探索可持续的盈利路径。</p>
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">C端订阅制</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">直接向用户收取订阅费<br>• ChatGPT Plus：20美元/月<br>• 文心一言会员：国内C端付费<br>• 豆包会员：娱乐场景增值<br>核心逻辑<br>通过高级功能吸引用户付费，<br>形成稳定的现金流收入</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">B端API</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">按Token计费，开发者调用<br>• 火山引擎：字节云服务平台<br>• 阿里云百炼：企业级API<br>• 按Token计费：用多少付多少<br>核心逻辑<br>面向开发者和企业，<br>提供稳定可扩展的API服务</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">生态整合</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">AI嵌入现有产品生态<br>• 腾讯元宝：打通微信生态<br>• 阿里千问：融入淘宝、钉钉<br>• 华为盘古：政企行业方案<br>核心逻辑<br>通过现有产品流量变现，<br>降低用户获取成本</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">盈利困境：高收入与高成本并存</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">OpenAI 2025年年化收入200亿美元，算力成本160亿美元，每赚1美元净亏0.6美元。国内厂商同样面临盈利压力。</div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      • ChatGPT Plus：20美元/月
+• 文心一言会员：国内C端付费
+• 豆包会员：娱乐场景增值
+核心逻辑
+通过高级功能吸引用户付费，
+形成稳定的现金流收入
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：虎嗅</div>
+  </div>
+  <div class="slide flex-center" id="s15">
+    <div class="data-badge" style="margin-bottom: 24px;">CHAPTER 03</div>
+    <h1 style="font-size: 2.4rem; margin-bottom: 16px; line-height: 1.2;">03 Token经济：商业模式与成本逻辑</h1>
+    <p style="color: var(--text2); font-size: 1.15rem; max-width: 600px; line-height: 1.6;">从"算力消耗"到"Token结算"的价值重构。深入拆解Token经济的底层逻辑——为什么Token成为AI时代的"价值锚点"？它的成本如何计算？带来了哪些新商业模式？</p>
+  </div>
+  <div class="slide" id="s16">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">Token计费逻辑：一次对话花多少钱？</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">Token计费逻辑：一次对话花多少钱？</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">总费用 = (输入Token数 + 输出Token数) × 单价</p>
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">计费公式</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">计费示例</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">用户输入100字问题（约130 Token）<br>模型返回200字回答（约70 Token）<br>使用GPT-3.5级别模型<br>≈ $0.0004 / 次<br>1个汉字 ≈ 1-2个Token</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">核心洞察：对话成本取决于输入长度 × 模型单价。输入越长、模型越先进，单次调用成本越高。选择匹配业务需求的模型是成本控制的关键。</div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      核心洞察：对话成本取决于输入长度 × 模型单价。输入越长、模型越先进，单次调用成本越高。选择匹配业务需求的模型是成本控制的关键。
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：CSDN博客《大模型Token计费详解》</div>
+  </div>
+  <div class="slide" id="s17">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">2026年国内外模型API价格全景对比</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">2026年国内外模型API价格全景对比</h2>
+    
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">每百万Token输入/输出价格对比</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">核心洞察：国产模型价格优势显著，部分完全免费，国际模型价格仍高出数倍至数十倍</div>
+      </div>
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：freeaitool.com, cnblogs.com</div>
+  </div>
+  <div class="slide" id="s18">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">Token成本拆解：从电力到GPU到输出</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">Token成本拆解：从电力到GPU到输出</h2>
+    
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">Token成本全链路</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">电力成本<br>数据中心电费</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">数据中心</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">运维与散热</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">GPU芯片</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">采购与租赁</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">训练/推理</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">模型计算</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">Token输出</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">最终用户成本</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">OpenAI 2025年成本结构</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">算力租卡成本：160亿美元<br>年化收入：200亿美元<br>经营性亏损：119.2亿美元<br>每赚1美元净亏：$0.6</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">关键趋势</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">推理成本正在超过训练成本，成为新的成本中心。<br>随着模型调用量爆发式增长，推理阶段的GPU消耗持续攀升。<br>API定价的核心压力来自推理，而非训练。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">结论：Token成本 = 电力 + 数据中心 + GPU + 训练/推理。理解成本结构有助于在采购AI服务时做出更明智的决策。</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;"></div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      推理成本正在超过训练成本，成为新的成本中心。
+随着模型调用量爆发式增长，推理阶段的GPU消耗持续攀升。
+API定价的核心压力来自推理，而非训练。
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：虎嗅《OpenAI的200亿美元与160亿美元》</div>
+  </div>
+  <div class="slide" id="s19">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">Token经济新商业模式：从订阅到按量</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">Token经济新商业模式：从订阅到按量</h2>
+    
+    <div class="grid-2" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">案例一</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">迅策科技：从订阅到按Token<br>从订阅制转为"单次价格×Token次数×模块数"模式<br>2025年收入12.85亿元，同比增长103%<br>Token付费收入占比目标20-30%</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">案例二</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">无问芯穹：Token调用量爆发<br>平台日均Token调用量较2025年底增长超20倍<br>以MaaS模型即服务为核心商业模式<br>按量计费降低企业AI使用门槛</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">订阅制 vs 按Token计费</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">传统订阅制<br>固定月费/年费，无论使用多少<br>资源可能浪费，成本不可控</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">按Token计费
+用多少付多少，与产出直接挂钩
+成本可量化，ROI更清晰</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;"></div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">对传媒行业的启示：Token经济让内容生产的AI成本与产出直接挂钩。一篇10万字的AI辅助审校与一篇1000字的摘要生成，成本差异清晰可见，ROI更可量化。</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;"></div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      平台日均Token调用量较2025年底增长超20倍
+以MaaS模型即服务为核心商业模式
+按量计费降低企业AI使用门槛
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：36氪《迅策科技转型》，虎嗅《无问芯穹》</div>
+  </div>
+  <div class="slide" id="s20">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">Token出海：中国AI的"新出口商品"</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">Token出海：中国AI的"新出口商品"</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">海外开发者调用中国模型的API，等于购买中国的算力服务。
+中国Token调用量已超越美国，成为全球第一大Token生产国。
+Token是"智能时代的价值锚点"和"结算单位"。</p>
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">Token出海的本质</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">Token是智能时代的价值锚点和结算单位。<br>— 国家数据局局长 刘烈宏</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">中国模型周处理 12.96万亿 Token，是美国的 4.3倍</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">趋势：Token出海正在拉动算力网络、数据中心和边缘计算建设。运营商从"卖带宽"转向"卖算力+卖Token"，形成新的价值链。</div>
+      </div>
+    </div>
+    <div style="margin-top: 20px; text-align: center;">
+      <img src="charts/chart_20.png" style="max-width: 90%; max-height: 260px; border-radius: 8px; border: 1px solid var(--border);" alt="chart">
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：新浪财经《Token经济新出口》，虎嗅</div>
+  </div>
+  <div class="slide flex-center" id="s21">
+    <div class="data-badge" style="margin-bottom: 24px;">CHAPTER 04</div>
+    <h1 style="font-size: 2.4rem; margin-bottom: 16px; line-height: 1.2;">04 AI浪潮下传媒行业变革</h1>
+    <p style="color: var(--text2); font-size: 1.15rem; max-width: 600px; line-height: 1.6;">从内容生产到传播分发的全链路重塑。本章聚焦AI对传媒行业的实际影响——哪些场景已经落地？哪些案例值得借鉴？哪些方向被证明可行/不可行？</p>
+  </div>
+  <div class="slide" id="s22">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">传媒行业AI落地的六大高频场景</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">传媒行业AI落地的六大高频场景</h2>
+    
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">辅助编辑</div>
+<ul style="margin: 0; padding-left: 18px; color: var(--text2); font-size: 1.05rem; line-height: 1.5;">
+          <li style="margin-bottom: 4px;">事实核查与验证</li>
+          <li style="margin-bottom: 4px;">语音转文字</li>
+          <li style="margin-bottom: 4px;">自动配字幕</li>
+          <li style="margin-bottom: 4px;">智能剪辑辅助</li>
+          <li style="margin-bottom: 4px;">新华社调查：探索最多</li>
+        </ul>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">创作内容</div>
+<ul style="margin: 0; padding-left: 18px; color: var(--text2); font-size: 1.05rem; line-height: 1.5;">
+          <li style="margin-bottom: 4px;">生成文章摘要</li>
+          <li style="margin-bottom: 4px;">制作数据图表</li>
+          <li style="margin-bottom: 4px;">数字主播配音</li>
+          <li style="margin-bottom: 4px;">辅助内容生成</li>
+          <li style="margin-bottom: 4px;">提升生产效率</li>
+        </ul>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">策划选题</div>
+<ul style="margin: 0; padding-left: 18px; color: var(--text2); font-size: 1.05rem; line-height: 1.5;">
+          <li style="margin-bottom: 4px;">草拟采访提纲</li>
+          <li style="margin-bottom: 4px;">热点趋势分析</li>
+          <li style="margin-bottom: 4px;">选题智能推荐</li>
+          <li style="margin-bottom: 4px;">受众兴趣预测</li>
+          <li style="margin-bottom: 4px;">数据驱动决策</li>
+        </ul>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">智能审校</div>
+<ul style="margin: 0; padding-left: 18px; color: var(--text2); font-size: 1.05rem; line-height: 1.5;">
+          <li style="margin-bottom: 4px;">错别字与语法纠错</li>
+          <li style="margin-bottom: 4px;">政治术语审核</li>
+          <li style="margin-bottom: 4px;">事实性错误检测</li>
+          <li style="margin-bottom: 4px;">统一体例规范</li>
+          <li style="margin-bottom: 4px;">出版行业刚需</li>
+        </ul>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">多模态创作</div>
+<ul style="margin: 0; padding-left: 18px; color: var(--text2); font-size: 1.05rem; line-height: 1.5;">
+          <li style="margin-bottom: 4px;">图文转视频</li>
+          <li style="margin-bottom: 4px;">AI动画生成</li>
+          <li style="margin-bottom: 4px;">多平台内容适配</li>
+          <li style="margin-bottom: 4px;">融媒体内容工厂</li>
+          <li style="margin-bottom: 4px;">一键多形态输出</li>
+        </ul>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">个性化分发</div>
+<ul style="margin: 0; padding-left: 18px; color: var(--text2); font-size: 1.05rem; line-height: 1.5;">
+          <li style="margin-bottom: 4px;">算法推荐引擎</li>
+          <li style="margin-bottom: 4px;">用户画像构建</li>
+          <li style="margin-bottom: 4px;">精准内容触达</li>
+          <li style="margin-bottom: 4px;">提升阅读转化率</li>
+          <li style="margin-bottom: 4px;">千人千面推送</li>
+        </ul>
+      </div>
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：新华社《AI编辑部调研》</div>
+  </div>
+  <div class="slide" id="s23">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">案例拆解：新华社"AI编辑部"</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">案例拆解：新华社"AI编辑部"</h2>
+    
+    <div class="grid-2" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">新华社"AI编辑部"系统</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">核心能力：文字稿自动转化为短视频、音频、H5等形态，适配不同平台。<br>新华智云：发布25款媒体机器人，助力新闻采集和处理。<br>媒体大脑·MAGIC：最快一条世界杯短视频从进球到发布仅需6秒。<br>智能采访终端：一部手机完成融媒体稿件处理。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">6秒</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">世界杯短视频生成<br>25款<br>媒体机器人<br>多形态<br>视频/音频/H5自动转换</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">关键启示</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">新华社"AI编辑部"的核心价值在于重构新闻生产流程，而非简单替代记者。<br>AI负责"快"——快速采集、快速转换、快速分发；记者负责"深"——深度调查、深度解读、深度判断。<br>这种模式对传媒行业具有高度可复制性。</div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      核心能力：文字稿自动转化为短视频、音频、H5等形态，适配不同平台。
+新华智云：发布25款媒体机器人，助力新闻采集和处理。
+媒体大脑·MAGIC：最快一条世界杯短视频从进球到发布仅需6秒。
+智能采访终端：一部手机完成融媒体稿件处理。
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：华东师范大学《AI编辑部研究》</div>
+  </div>
+  <div class="slide" id="s24">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">案例拆解：人民日报、央视的智能化转型</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">案例拆解：人民日报、央视的智能化转型</h2>
+    
+    <div class="grid-2" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">人民日报"创作大脑AI+"</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">集纳近20款智能工具<br>一站式完成采访、拍摄、直播、剪辑、发布<br>"智晓助"系统：<br>机器辅助识别文稿、图片、视频中的不规范内容<br>实现全流程智能化覆盖</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">央视AI云剪辑平台</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">12路直播信号智能加工<br>90秒生产一条短视频<br>"总台算法"内容漏斗模型<br>央视频10多个板块应用后<br>播放指标增长50-300%</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">转型核心逻辑</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">人民日报和央视的转型路径呈现共同特征：平台化整合 + 工具化赋能 + 数据化驱动。<br>不追求"无人化"，而是打造"人机协同"的智能化工作流——AI处理重复性、标准化任务，人类聚焦创意、判断和深度。<br>对县级融媒体中心而言，这种"平台+工具"模式尤其具有参考价值。</div>
+      </div>
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：人民网研究院，央视频官方数据</div>
+  </div>
+  <div class="slide" id="s25">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">案例拆解：杭州电视台AI数字人主播</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">案例拆解：杭州电视台AI数字人主播</h2>
+    
+    <div class="grid-2" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">杭州电视台：国内首个常态化AI数字人播报</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">2024年春节，《杭州新闻联播》启用6位AI数字人主播。<br>接入DeepSeek-V3大模型，具备实时文稿审核与新闻整合能力。<br>播报准确率显著提升，成为国内首个常态化应用数字人播报的新闻机构。<br>数字人主播矩阵可7×24小时工作，大幅降低人力成本。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">6位</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">AI数字人主播<br>7×24h<br>全天候工作能力<br>DeepSeek<br>V3大模型驱动</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">关键启示</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">数字人主播不是替代真人主播，而是拓展播报场景——夜间新闻、突发事件、多语种播报等。<br>DeepSeek-V3的接入使数字人具备"思考"能力，从"读稿机器"升级为"智能主播"。<br>对地方电视台而言，这是降本增效的切实路径。</div>
+      </div>
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：人民网研究院《AI数字人应用》</div>
+  </div>
+  <div class="slide" id="s26">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">可灵AI：AIGC如何重构影视制作流程</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">可灵AI：AIGC如何重构影视制作流程</h2>
+    
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">可灵AI平台能力</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">从剧本预演、镜头生成到后期制作全链条自动化<br>全球用户规模突破2200万<br>访问量份额超30%<br>动态渲染、语义匹配、风格建构三大技术支柱<br>赋能小团队以工业级内容输出能力</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">2200万+</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">全球用户规模<br>30%<br>访问量份额</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">49%</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">AI视频采用率增长</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">2025年流媒体公司和数字广告商中，AI视频创作采用率增加49%</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;"></div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">AIGC重构影视制作流程</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">剧本预演<br>AI生成视觉预览</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">镜头生成
+AIGC视频生成</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;"></div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">后期制作
+自动剪辑与合成</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;"></div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">成品输出
+工业级内容</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;"></div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">核心价值：可灵AI让小团队拥有工业级内容输出能力，大幅降低影视制作门槛。这对融媒体中心、MCN机构、地方电视台具有直接参考价值。</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;"></div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      核心价值：可灵AI让小团队拥有工业级内容输出能力，大幅降低影视制作门槛。这对融媒体中心、MCN机构、地方电视台具有直接参考价值。
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：人民网研究院《AIGC影视应用》</div>
+  </div>
+  <div class="slide" id="s27">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">出版业AI应用：智能审校与选题策划</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">出版业AI应用：智能审校与选题策划</h2>
+    
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">蜜度"文修"智能校对</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">智能校对大模型实现90秒校对20万字，覆盖字词、标点、语法、政治术语等多维度纠错。<br>90秒 / 20万字<br>多维度智能审校</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">果麦文化"AI校对王"</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">引入超百亿字训练数据，已被超过20家出版单位采用，覆盖图书全品类校对场景。<br>20+ 家出版单位使用<br>超百亿字训练数据</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">人教社AIGC实验室</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">建立AIGC实验室，完成ChatGPT、通义千问、文心一言等主流大模型在出版场景的验证测试。<br>多模型 验证测试<br>主流大模型全覆盖</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">数传集团AI编辑工作室</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">AI编辑工作室使选题策划提效57-89%，实现从热点追踪到选题报告生成的智能化闭环。<br>57-89% 选题策划提效<br>智能化闭环</div>
+      </div>
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：搜狐《出版业AI应用观察》</div>
+  </div>
+  <div class="slide" id="s28">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">成功转型的可复制要素：技术+流程+人才</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">成功转型的可复制要素：技术+流程+人才</h2>
+    
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">技术层面</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">选择与业务匹配的AI工具<br>不盲目追求大模型参数<br>评估ROI与成熟度</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">流程层面</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">重构工作流而非简单叠加<br>打通数据孤岛<br>芜湖"智能媒体大脑"案例</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">人才层面</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">培养"AI+传媒"复合型人才<br>建立内部AI培训体系<br>技术+内容双轮驱动</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">核心洞察：技术、流程、人才三者缺一不可。技术是手段，流程是载体，人才是核心。任何单一要素的突出都无法支撑成功转型。</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;"></div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      核心洞察：技术、流程、人才三者缺一不可。技术是手段，流程是载体，人才是核心。任何单一要素的突出都无法支撑成功转型。
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：响声网、澎湃新闻</div>
+  </div>
+  <div class="slide" id="s29">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">被证明不可行的方向：这些坑别踩</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">被证明不可行的方向：这些坑别踩</h2>
+    
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">传媒AI转型中已被实践验证的四大误区</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">"无人编辑部"幻想<br>AI在深度解读、情感表达、价值判断上仍有根本局限，完全替代人类编辑的设想已被证伪。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">未经审核直接发布</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">BuzzFeed等曾因AI内容质量下降导致用户流失，内容未经人工审核直接发布是危险做法。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">盲目采购昂贵硬件</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">不配套流程改造的硬件采购沦为"高科技摆设"，技术投资必须与业务场景深度匹配。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">忽视版权法律风险</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">AI内容生产面临版权归属不清、法律合规等挑战，忽视风险可能导致严重法律后果。</div>
+      </div>
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：辽宁日报新媒体</div>
+  </div>
+  <div class="slide" id="s30">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">有潜力的方向：2026-2027值得关注</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">有潜力的方向：2026-2027值得关注的赛道</h2>
+    
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">未来1-2年传媒AI领域最值得布局的五个方向</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">人机协同深度报道<br>AI处理海量数据，记者专注深度访谈与叙事，实现"数据+故事"的融合报道。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">个性化内容生成</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">基于用户画像的"千人千面"新闻推送，从"人找内容"转向"内容找人"。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">多模态内容工厂</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">一条新闻稿自动生成图文、视频、音频、H5，实现"一次生产、多端分发"。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">AI知识服务</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">从"卖书"到"卖智能知识包"，出版边界从纸质书扩展到交互式服务。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">方言与国际化传播</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">AI翻译+本地文化适配，助力中国内容走向全球，实现跨语言传播。</div>
+      </div>
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：响声网</div>
+  </div>
+  <div class="slide" id="s31">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">Token经济对电信行业的影响：新商业模</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">Token经济对电信行业的影响：新商业模式</h2>
+    
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">算力网络需求爆发</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">Token调用量两年增长超千倍，拉动数据中心和边缘计算基础设施建设进入高速增长期。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">新商业模式</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">运营商从"卖带宽"转向"卖算力+卖Token"，航锦科技等布局Token出海基础设施。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">产业链重构</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">上游芯片、中游数据中心、下游应用形成Token价值链，但需关注数据安全和终端议价能力风险。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">关键洞察</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">Token经济正在重塑电信行业的价值链条：</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">1. 算力成为核心资产<br>2. 计费模式从带宽转向Token<br>3. 产业链上下游深度耦合</div>
+      </div>
+    </div>
+    <div style="margin-top: 20px; text-align: center;">
+      <img src="charts/chart_31.png" style="max-width: 90%; max-height: 260px; border-radius: 8px; border: 1px solid var(--border);" alt="chart">
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      Token经济正在重塑电信行业的价值链条：
+1. 算力成为核心资产
+2. 计费模式从带宽转向Token
+3. 产业链上下游深度耦合
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：新浪财经、同花顺</div>
+  </div>
+  <div class="slide flex-center" id="s32">
+    <div class="data-badge" style="margin-bottom: 24px;">CHAPTER 05</div>
+    <h1 style="font-size: 2.4rem; margin-bottom: 16px; line-height: 1.2;">05 出版行业的AI应用实践</h1>
+    <p style="color: var(--text2); font-size: 1.15rem; max-width: 600px; line-height: 1.6;">从图书编辑到知识服务的全链路升级。聚焦出版行业的具体AI应用——智能审校、内容生产、知识服务、融媒体制作，为出版从业者提供可直接参考的落地路径。</p>
+  </div>
+  <div class="slide" id="s33">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">图书编辑工作流：AI如何重塑"编、审、校</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">图书编辑工作流：AI如何重塑"编、审、校、发"</h2>
+    
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">+30%</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">选题命中率提升</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">-50%</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">校对时间缩短</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">400</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">张AI生成插图</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">全链路</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">AI营销覆盖</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">典型案例：中国科传通过AI分析读者行为数据，选题命中率显著提升；福建少儿社《森林画报》400张图片全部AI生成；AI自动生成书评和短视频脚本，实现全网精准推送。</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;"></div>
+      </div>
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：搜狐、汉斯出版社</div>
+  </div>
+  <div class="slide" id="s34">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">智能审校：从"人工三审三校"到"AI+人</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">智能审校：从"人工三审三校"到"AI+人工"协同</h2>
+    
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">AI+人工协同模式</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">AI不替代人工，而是将人解放到更高价值环节：</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">AI负责：字词、标点、语法、政治术语、领导人职务、机构名称等多维度自动纠错<br>人工负责：价值判断、深度解读、情感表达、创意策划</div>
+      </div>
+    </div>
+    <div style="margin-top: 20px; text-align: center;">
+      <img src="charts/chart_34.png" style="max-width: 90%; max-height: 260px; border-radius: 8px; border: 1px solid var(--border);" alt="chart">
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：搜狐科技</div>
+  </div>
+  <div class="slide" id="s35">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">期刊出版的AI应用：从AI检测到学术不端</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">期刊出版的AI应用：从AI检测到学术不端防范</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">智能审稿系统应用NLP技术，自动校验参考文献、检测学术不端，单篇稿件处理用时缩短40%。</p>
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">96%</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">AI检测准确率</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">中华医学会杂志社</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">中国科传"科学文库"</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">高教社H0大模型</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">赋能智能备课、出题组卷、个性化学习，将大模型能力深度融入教育出版全流程。</div>
+      </div>
+    </div>
+    <div style="margin-top: 20px; text-align: center;">
+      <img src="charts/chart_35.png" style="max-width: 90%; max-height: 260px; border-radius: 8px; border: 1px solid var(--border);" alt="chart">
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：搜狐、汉斯出版社</div>
+  </div>
+  <div class="slide" id="s36">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">知识服务新形态：从"卖书"到"卖智能知识</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">知识服务新形态：从"卖书"到"卖智能知识包"</h2>
+    
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">AI推动出版业从"内容搬运工"向"知识价值创造者"转型</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">交互式数字人<br>中图云创"马可·波罗数字人"可与观众实时对话，打造沉浸式知识体验。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">AI学习助手</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">童趣与数传合作为迪士尼图书配备AI学习助手，实现个性化阅读辅导。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">有声书多媒体</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">TTS技术实现一键转语音，多角色配音，让书籍"开口说话"。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">知识图谱</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">关联图书内容与外部知识，构建深度阅读网络，提供系统性知识体验。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">核心趋势：出版的边界正在从纸质书扩展到智能服务。未来的出版机构不是"卖书"的，而是"卖知识解决方案"的。</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;"></div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      核心趋势：出版的边界正在从纸质书扩展到智能服务。未来的出版机构不是"卖书"的，而是"卖知识解决方案"的。
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：搜狐《出版业AI应用观察》</div>
+  </div>
+  <div class="slide" id="s37">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">融媒体内容制作：AI实现高效率、轻量化、</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">融媒体内容制作：AI实现高效率、轻量化、多元化</h2>
+    
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">县级融媒体正通过AI实现"小团队、大产出"</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">芜湖传媒中心</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">打造"智能媒体大脑"，实现从媒体运行到城市运营的转变，AI赋能全链路内容生产。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">广西来宾市融媒体</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">构建10名AI数字人主播矩阵，探索方言播报、虚拟记者等创新应用。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">三原县融媒体中心</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">锦华科技签约覆盖报纸、网站、微信、微博、头条等全平台内容审校。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">核心启示</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">县级融媒体通过AI实现：</div>
+<ul style="margin: 0; padding-left: 18px; color: var(--text2); font-size: 1.05rem; line-height: 1.5;">
+          <li style="margin-bottom: 4px;">小团队产出大内容</li>
+          <li style="margin-bottom: 4px;">一人多岗变为AI+人协同</li>
+          <li style="margin-bottom: 4px;">覆盖全媒体平台</li>
+          <li style="margin-bottom: 4px;">方言与本地化创新</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top: 20px; text-align: center;">
+      <img src="charts/chart_37.png" style="max-width: 90%; max-height: 260px; border-radius: 8px; border: 1px solid var(--border);" alt="chart">
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：锦华科技、响声网</div>
+  </div>
+  <div class="slide" id="s38">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">AI带来的四大新型学术风险</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">AI带来的四大新型学术风险</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">风险特征：AI生成内容隐蔽性高，查重系统难以识别
+典型案例：
+• 中国地质大学论文残留Certainly提示词
+• 韩国The AI Scientist工具隐蔽式复用
+• 华南师范大学跨语言英译中剽窃</p>
+    <div class="grid-2" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">学术剽窃风险</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;"></div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">数据造假风险</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">风险特征：AI可伪造数据、图像、参考文献<br>典型案例：<br>• 香港大学24篇虚假参考文献，占引用40%<br>• 西安红会医院SCI论文使用AI插图<br>• 中科院《Ecological Indicators》撤稿12篇<br>• MIT博士伪造数据，AI使新材料提升44%</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">隐私泄露风险</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">风险特征：未脱敏数据上传第三方AI平台<br>典型案例：<br>• 航天领域轨道参数等数据上传后外泄<br>• 敏感信息输入大模型（国家安全部披露）<br>• OpenClaw 10.8%插件含恶意代码</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">伦理失范风险</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">风险特征：AI代写突破学术主体边界<br>典型案例：<br>• 维尔纽斯大学、明尼苏达大学AI代写开除<br>• 律师引用AI编造不存在的法律案例<br>• ICLR/CVPR论文AI生成核心创意<br>• 社会科学研究放大刻板印象</div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      风险特征：AI代写突破学术主体边界
+典型案例：
+• 维尔纽斯大学、明尼苏达大学AI代写开除
+• 律师引用AI编造不存在的法律案例
+• ICLR/CVPR论文AI生成核心创意
+• 社会科学研究放大刻板印象
+    </div>
+  </div>
+  <div class="slide" id="s39">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">主动违规 vs 无意识违规：典型案例警示</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">主动违规 vs 无意识违规：典型案例警示</h2>
+    
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">主动违规</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">AI代写论文<br>• 立陶宛维尔纽斯大学约10名学生被开除<br>• 耶鲁EMBA学生判不及格停课<br>• 明尼苏达大学博士三年级中国留学生被开除<br>伪造文献<br>• 香港大学AI批量伪造参考文献（2025），论文撤稿、导师辞职<br>• 斯坦福大学AI伪造高引文献虚构被引次数<br>• AI生成虚假临床数据集（眼科手术疗效）<br>恶意规避审查<br>• 用AI句式改写、同义词替换、段落重组逃避查重<br>• 去AI化反向操作：先用AI生成再用Quillbot去AI化</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">无意识违规</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">论文残留AI提示词<br>• 全球首例AI提示词撤稿，出现Regenerate response等ChatGPT原文<br>语言润色越界<br>• Grammarly Premium重写句子功能导致整篇论文句式、逻辑被AI重构<br>• 教育部抽检论文语言过于完美且逻辑高度程式化被质疑<br>用AI描述实验结果<br>• 自己做实验让AI写Discussion，学术思想、结论解读让机器完成</div>
+      </div>
+    </div>
+<div class="source-tag" style="margin-top: 16px;">数据来源：搜狐传媒、各大学公开通报</div>
+  </div>
+  <div class="slide" id="s40">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">不同学科的AI不当使用：这些"雷区"你踩</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">不同学科的AI不当使用：这些"雷区"你踩过吗？</h2>
+    
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">人文社科</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">田野调查/口述史造假<br>社会学学生用AI扩写访谈记录，基于大数据刻板印象而非真实观察</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">医学领域</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">图像与数据双重失范<br>《Medicine》期刊论文AI生成骨骼图，小腿和手臂骨骼数量与解剖学不符，标签含随机字符串</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">工科方向</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">伪造算法和实验数据<br>AI生成虚假实验数据、统计结果、仿真图表，无真实实验；AI直接生成模型结构导致不同院校论文高度雷同</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">经管学科</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">政策建议的空中楼阁<br>AI生成立即取消所有户籍限制等建议，无视社保体系、财政分担机制等现实约束，纸上谈兵</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide" id="s41">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">学术出版的红线与底线：四个"严禁"</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">学术出版的红线与底线：四个"严禁"</h2>
+    
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">严禁AI代写论文</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">禁止用AI伪造论文数据、案例、参考文献及实验结果；拒绝AI拼凑整合，保证原创性；不得让AI替代核心研究环节，仅可用于辅助性操作</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">严禁数据伪造篡改</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">禁止AI生成虚假实验数据、调研数据及统计结果；不得用AI篡改原始数据、调整数值、歪曲结论；所有数据需真实可查、来源合规，留存原始记录</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">严禁未标注AI使用</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">只要使用AI辅助，无论场景轻重，均需如实标注；标注需明确AI工具名称、使用环节及具体用途；严禁隐瞒，未标注属于学术不端</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">严禁使用违规AI工具</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">禁用可伪造、篡改数据的违规AI工具；禁用含伪造文献、虚假引用功能的AI模块；仅选用合规、可追溯的AI工具</div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      禁止用AI伪造论文数据、案例、参考文献及实验结果；拒绝AI拼凑整合，保证原创性；不得让AI替代核心研究环节，仅可用于辅助性操作
+    </div>
+  </div>
+  <div class="slide" id="s42">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">可落地的学术道德风险防控方法</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">可落地的学术道德风险防控方法</h2>
+    
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">个人层面</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">坚守学术诚信，杜绝AI代写、伪造数据、伪造文献<br>主动学习学校AI学术使用规范，提升辨识能力<br>落实披露义务，如实披露AI使用细节（工具名称、使用场景），主动接受监督</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">学校/出版机构层面</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">制定明确AI使用规范，划定可使用场景和禁止行为，细化违规处罚<br>搭建分层分类培训体系，针对学生、科研人员、编辑开展AI学术规范培训<br>建立"自查+审核+抽查"全流程核查机制，配套AI内容检测工具</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">研究生培养/导师层面</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">强化前置引导，明确AI使用边界，将AI规范融入培养全过程<br>全程跟踪指导，重点核查AI辅助生成的内容（数据、文献、论证）<br>履行监管责任，结合典型案例开展常态化风险警示教育</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide" id="s43">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">AI学术规范小贴士：三个实用工作法</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">AI学术规范小贴士：三个实用工作法</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">用"分步追问"取代"一键生成"——利用"思维链（Chain of Thought）"提示词，强制AI将写作任务拆解为"观点列举→逻辑推演→证据匹配"三个独立步骤。AI从"代笔者"转变为"逻辑陪练"，最终语言组织与逻辑串联必须由人类完成。</p>
+    <div class="grid-2" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">01</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">思维链拆解法</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">出版人行动要点：审稿时关注论文是否有"AI痕迹"——逻辑过于流畅、论证过于程式化。</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">02</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">"三明治"工作流</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">强制遵循"人类构思框架→AI填充/润色→人类逐字核验"的操作流程，严禁"一键生成"。确立"人类对最终成果负全责"的底线。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">出版人行动要点：建立AI内容检测环节，将AI检测纳入出版流程管控。</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">03</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">"透明化"声明术</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">在论文方法章节、课件首页或项目报告中，主动添加标准化的"AI使用披露声明"。符合国际主流期刊（Nature、IEEE）最新政策。</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide flex-center" id="s44">
+    <div class="data-badge" style="margin-bottom: 24px;">CHAPTER 06</div>
+    <h1 style="font-size: 2.4rem; margin-bottom: 16px; line-height: 1.2;">06 从业者的机遇与挑战</h1>
+    <p style="color: var(--text2); font-size: 1.15rem; max-width: 600px; line-height: 1.6;">传媒人如何在AI时代保持不可替代性。面向一线从业者，回答最关心的三个问题：哪些技能更值钱？如何提高工作效率？如何甄别AI信息？</p>
+  </div>
+  <div class="slide" id="s45">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">传媒人应重点关注的五个方向</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">传媒人应重点关注的五个方向</h2>
+    
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">AI工具驾驭能力</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">熟练使用至少3-5款AI工具，成为"AI指挥家"而非"AI替代者"。掌握提示词工程，将AI作为效率放大器，在内容生产的各环节灵活调用，实现人机协作的最佳状态。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">垂直领域专业深度</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">在财经、医疗、法律等特定领域建立AI无法替代的专业深度。垂直领域的知识壁垒和判断经验，是传媒人的核心护城河，也是与AI共生时代的关键竞争力。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">内容价值判断力</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">AI可以生成海量信息，但无法判断什么信息值得传播。培养对新闻价值、社会意义和受众需求的敏锐判断力，决定内容传播的方向与深度，这是人的独特优势。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">跨媒介叙事能力</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">从文字到视频到互动体验的多模态表达。掌握跨媒介叙事技巧，让同一内容在不同平台呈现最佳形态，提升内容传播效能，构建全媒介内容生产能力。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">人机协同管理能力</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">设计AI辅助工作流程、审核AI输出质量。管理人机协同团队，确保AI生成内容符合专业标准和价值观，发挥人的把关作用，建立可靠的内容生产体系。</div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      在财经、医疗、法律等特定领域建立AI无法替代的专业深度。垂直领域的知识壁垒和判断经验，是传媒人的核心护城河，也是与AI共生时代的关键竞争力。
+    </div>
+<div class="source-tag" style="margin-top: 16px;">资料来源：中国新闻出版广电报（xiangshengnet.com）</div>
+  </div>
+  <div class="slide" id="s46">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">核心技能储备：哪些能力让AI无法替代你？</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">核心技能储备：哪些能力让AI无法替代你？</h2>
+    
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">情感共鸣与价值判断</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">AI可以分析数据，但无法生成真正的"思想"和"温度"。人类独有的情感连接和价值判断是内容传播的灵魂。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">现场采访与深度调研</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">AI无法替代新闻现场的"脚力、眼力、脑力、笔力"。深度报道需要亲身走访和人际信任，这是机器无法复制的。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">创意策划与叙事创新</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">如人民日报《提笔》《起宏图》等AI创意产品，核心创意仍来自人类。AI是工具，创意才是内容的灵魂。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">伦理把关与风险判断</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">AI内容审核、虚假信息甄别需要人类的伦理判断和责任意识。技术不能替代价值观，把关责任在人。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">跨领域整合思维</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">连接技术、内容、商业、用户的复合能力。AI擅长单一任务，人类擅长跨领域整合，这是不可替代的优势。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">核心观点</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">AI可以生成文字、图像、视频，<br>但它无法生成思想。<br>——人民日报新媒体中心主任 薛原</div>
+      </div>
+    </div>
+<div class="source-tag" style="margin-top: 16px;">资料来源：澎湃新闻</div>
+  </div>
+  <div class="slide" id="s47">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">如何甄别AI信息：避免被"幻觉"误导</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">如何甄别AI信息：避免被"幻觉"误导</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">关键信息必须通过原始出处确认，不轻信二手传播。养成追溯信源的习惯，确保信息真实可靠。</p>
+    <div class="grid-3" style="margin-top: 24px; gap: 14px;">
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">1</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">溯源验证</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">2</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">多源交叉</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">同一事件至少查看3个不同来源，对比报道差异。交叉验证是识别偏见和误报的最有效方法。</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">3</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">常识判断</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">违背常识的"惊人数据"要警惕。用逻辑和专业知识检验AI输出的合理性，不盲信权威。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">4</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">工具辅助</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">使用AI检测工具识别AI生成内容。中华医学会杂志社率先引入AI检测，准确率达96%。</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">5</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">保持怀疑</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">AI越强大，对人的要求越高。保持批判性思维，对任何信息都多问一个"为什么"，这是信息时代的生存技能。</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">案例：AI检测系统实战应用</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">中华医学会杂志社</div>
+      </div>
+      <div class="card" style="padding: 14px;">
+        <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;">中华医学会杂志社率先引入AI检测工具，辨别投稿是否由AI产生，准确率达96%。该系统为学术出版领域防范AI滥用提供了可复制的技术路径，有效维护了学术诚信。</div>
+<div style="color: var(--text2); font-size: 1.05rem; line-height: 1.5;">96%<br>AI内容检测准确率<br>中华医学会杂志社 | 2025年实测数据</div>
+      </div>
+    </div>
+<div class="source-tag" style="margin-top: 16px;">资料来源：辽宁日报</div>
+  </div>
+  <div class="slide" id="s48">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">提升工作效率：AI可以帮传媒人做什么？</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">提升工作效率：AI可以帮传媒人做什么？</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">用AI生成初稿、扩展素材、优化标题，内容生产效率可提升30-50%。将AI作为创作助手，释放创意生产力。</p>
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">内容生产</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">多模态转换</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">一条文字稿自动生成短视频脚本、配音、字幕，实现内容的多模态转换和跨平台分发，大幅提升传播效率。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">数据分析</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">AI辅助分析用户行为数据、热点趋势，帮助编辑和记者快速洞察受众需求，精准把握内容方向。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">日常办公</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">会议纪要自动整理、邮件自动撰写、PPT大纲生成，将日常办公事务交给AI，专注核心内容创作。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">学习提升</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">用AI快速理解新领域知识、跟踪行业动态，建立个人知识管理系统，在快速变化的时代保持竞争力。</div>
+      </div>
+    </div>
+    <div style="margin-top: 20px; text-align: center;">
+      <img src="charts/chart_48.png" style="max-width: 90%; max-height: 260px; border-radius: 8px; border: 1px solid var(--border);" alt="chart">
+    </div>
+<div class="source-tag" style="margin-top: 16px;">资料来源：新华社</div>
+  </div>
+  <div class="slide" id="s49">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">未来传媒人才画像："AI+人文"复合型人</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">未来传媒人才画像："AI+人文"复合型人才</h2>
+    
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">技术理解力</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">理解AI的能力和边界，不盲目崇拜也不恐惧。技术理解力是复合型人才的基础素养。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">专业深度</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">在某个垂直领域有不可替代的专业深度，知识壁垒和判断经验是核心竞争力，也是与AI共生时代的关键护城河。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">创新能力</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">能提出AI无法自主产生的创意问题，将技术工具与人文洞察结合，创造独特的内容价值。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">伦理素养</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">在AI应用中把握价值导向和合规边界，具备责任意识和文化敏感度，伦理素养是不可逾越的职业底线。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">终身学习</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">AI每3-6个月迭代一次，保持终身学习能力，快速适应新技术和新场景，是传媒人最大的竞争力。</div>
+      </div>
+    </div>
+    <div style="margin-top: 20px; text-align: center;">
+      <img src="charts/chart_49.png" style="max-width: 90%; max-height: 260px; border-radius: 8px; border: 1px solid var(--border);" alt="chart">
+    </div>
+<div class="source-tag" style="margin-top: 16px;">资料来源：澎湃新闻</div>
+  </div>
+  <div class="slide" id="s50">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">一本图书的"AI七十二变"：从Word文</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">一本图书的"AI七十二变"：从Word文档到出版物的全链路</h2>
+    <p style="color: var(--text2); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.5;">以20万字计算机类图书为例，对比传统流程与AI辅助流程的效率差异</p>
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">传统出版流程</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">选题策划：2-3周<br>内容编辑：4-6周<br>三审三校：3-4周<br>排版设计：2-3周<br>营销发行：1-2周<br>总计：3-4个月</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">AI辅助出版流程</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">选题策划：AI热点分析，3天<br>内容编辑：AI辅助写作，2周<br>AI校对：90秒/20万字，3天<br>AI排版：一键生成，1周<br>AI营销：自动分发，即时<br>总计：72小时</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">90秒</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">AI校对20万字<br>传统需2-3周</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">30%</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">AI选题命中率<br>比传统提升幅度</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">50%</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">排版时间缩短<br>AI一键生成</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">"AI不是让编辑失业，而是让编辑从'找错别字'的体力活中解放出来，把精力投入到真正创造价值的选题策划和内容打磨中。"</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">—— 果麦文化编辑总监</div>
+      </div>
+    </div>
+    <div style="margin-top: 20px; text-align: center;">
+      <img src="charts/chart_50.png" style="max-width: 90%; max-height: 260px; border-radius: 8px; border: 1px solid var(--border);" alt="chart">
+    </div>
+<div class="source-tag" style="margin-top: 16px;">资料来源：搜狐传媒、蜜度科技、中国科传等公开案例整理</div>
+  </div>
+  <div class="slide" id="s51">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <span class="section-label">拥抱AI，但不迷失于AI</span>
+      <div class="section-line"></div>
+    </div>
+    <h2 style="margin-bottom: 8px; line-height: 1.3;">拥抱AI，但不迷失于AI</h2>
+    
+    <div style="margin-top: 24px;">
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">人工智能不是传媒行业的终结者，而是新质生产力的催化剂。技术的浪潮不可逆转，但内容的温度、思想的力量、人文的光辉，永远是传媒人的核心竞争力。</div>
+      </div>
+      <div class="card" style="padding: 14px; margin-bottom: 12px;">
+        <div style="color: var(--text2); font-size: 1.0rem; line-height: 1.5;">谢谢聆听 | 欢迎交流讨论</div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px; font-size: 1.0rem; line-height: 1.5;">
+      人工智能不是传媒行业的终结者，而是新质生产力的催化剂。技术的浪潮不可逆转，但内容的温度、思想的力量、人文的光辉，永远是传媒人的核心竞争力。
+    </div>
+  </div>
+
+</div>
+
+<div class="slide flex-center" id="s52">
+  <div style="position:relative; z-index: 1;">
+    <div class="data-badge" style="margin-bottom: 20px; font-size: 0.8rem;">CASE STUDY · 2026</div>
+    <h1 style="font-size: 3.5rem;">AI案例专题：意图即代码</h1>
+    <h2 style="font-weight: 300; opacity: 0.8; margin-bottom: 50px; font-size: 1.8rem;">非技术者的 AI 协作共创与验证方法</h2>
+    <div style="margin-top: 30px; line-height: 2.2;">
+      <p style="font-size: 1.2rem; font-weight: 600;">主讲人：张赟</p>
+      <p style="opacity: 0.7; font-size: 0.95rem;">媒体工程学院 副院长 教授</p>
+      <p style="opacity: 0.6; font-size: 0.9rem;">浙江大学工学博士 · 杭州市计算机学会理事 · 中国计算机学会高级会员</p>
+    </div>
+    <div style="margin-top: 60px; opacity: 0.4; font-family:'JetBrains Mono',monospace; font-size:0.8rem;">
+      “AI不会消除专业判断，只会放大清晰意图。”
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s53">
+  <div class="section-header">
+    <span class="section-label">CONTENTS</span>
+    <div class="section-line"></div>
+  </div>
+  <h2>目录</h2>
+  <div class="grid-2" style="margin-top: 30px;">
+    <div class="card" style="cursor:default;">
+      <div style="font-size: 2rem; margin-bottom: 8px;">01</div>
+      <h3 style="color: var(--primary);">开场与背景</h3>
+    </div>
+    <div class="card" style="cursor:default;">
+      <div style="font-size: 2rem; margin-bottom: 8px;">02</div>
+      <h3 style="color: var(--primary);">引子：AI引起的变革</h3>
+    </div>
+    <div class="card" style="cursor:default;">
+      <div style="font-size: 2rem; margin-bottom: 8px;">03</div>
+      <h3 style="color: var(--primary);">AI时代的基础概念</h3>
+    </div>
+    <div class="card" style="cursor:default;">
+      <div style="font-size: 2rem; margin-bottom: 8px;">04</div>
+      <h3 style="color: var(--primary);">非技术者的优势</h3>
+    </div>
+    <div class="card" style="cursor:default;">
+      <div style="font-size: 2rem; margin-bottom: 8px;">05</div>
+      <h3 style="color: var(--primary);">与AI的协作方法</h3>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s54">
+  <div class="section-header">
+    <span class="section-label">CHAPTER 01</span>
+    <div class="section-line"></div>
+  </div>
+  <h2>主讲人介绍</h2>
+  <div style="display:flex; gap:40px; align-items:center; margin-top:30px;">
+    <div style="width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary2));display:flex;align-items:center;justify-content:center;font-size:3.5rem;flex-shrink:0;">
+      <span style="font-weight:900;">张</span>
+    </div>
+    <div>
+      <h3 style="color:var(--primary); font-size:2.2rem; margin-bottom:18px;">张赟</h3>
+      <div style="line-height:2.1; opacity:0.85; font-size:1.25rem;">
+        <p>媒体工程学院副院长、教授</p>
+        <p>浙江大学工学博士</p>
+        <p>杭州市计算机学会理事</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide flex-center" id="s55">
+  <div>
+    <div class="data-badge" style="margin-bottom:20px;">CHAPTER 02</div>
+    <h1>引子：AI引起的变革</h1>
+  </div>
+</div>
+
+<div class="slide" id="s56">
+  <div class="section-header">
+    <span class="section-label">CASE 01</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>案例一：AI参与破解80年数学猜想：从“检索答案”到“发现新路径”</h3>
+  <div class="grid-2" style="margin-top:20px;">
+    <div class="card card-glow">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;">
+        <div>
+          <span class="data-badge">2026年5月</span>
+        <span class="data-badge" style="margin-left:8px;">OpenAI</span>
+        </div>
+      </div>
+      <p style="font-size:1.1rem; line-height:1.8;">
+        OpenAI 内部模型提出了新的构造思路，帮助解决数学家 Paul Erdős 于 1946 年提出的“平面单位距离问题”相关猜想。重要之处不只是模型给出答案，而是它给出的推理路径获得了顶尖数学家的认真认可。
+      </p>
+      <div class="highlight-box" style="margin-top:20px;">
+        <p style="font-size:0.95rem; line-height:1.8;">
+          <strong>戏剧性转折：</strong>约 7 个月前，OpenAI 曾因“GPT-5 解决 10 个 Erdős 问题”的说法被数学界质疑：批评点在于模型更像检索到已有文献，而不是产生新的数学发现。
+        </p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;">
+        <div style="background:rgba(var(--accent-rgb),0.05);border-left:3px solid var(--accent);padding:12px;border-radius:0 8px 8px 0;">
+          <div style="font-size:0.75rem;color:var(--accent);font-weight:700;margin-bottom:4px;">此前争议</div>
+          <p style="font-size:0.78rem;line-height:1.55;opacity:0.8;">“会找答案”不等于“会做数学”；学术界要求原创推理、可验证证明和专家审查。</p>
+        </div>
+        <div style="background:rgba(var(--green-rgb),0.05);border-left:3px solid var(--green);padding:12px;border-radius:0 8px 8px 0;">
+          <div style="font-size:0.75rem;color:var(--green);font-weight:700;margin-bottom:4px;">这次认可</div>
+          <p style="font-size:0.78rem;line-height:1.55;opacity:0.8;">多位数学家认为模型给出了原创、巧妙且可推进的构造路径。</p>
+        </div>
+      </div>
+      <p style="opacity:0.6; font-size:0.9rem; margin-top:12px;">
+        更准确的讲法：这不是“AI替代数学家”，而是 AI 第一次更有说服力地展示了从提出候选思路到接受专家检验的高水平协作潜力。
+      </p>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--primary);margin-bottom:16px;">学术界评价</h4>
+      <div style="background:rgba(var(--green-rgb),0.05);border-left:3px solid var(--green);padding:14px 16px;border-radius:0 8px 8px 0;margin-bottom:12px;">
+        <p style="font-size:0.9rem;line-height:1.7;"><strong style="color:var(--green);">Tim Gowers</strong>（菲尔兹奖得主）：</p>
+        <p style="opacity:0.8;font-size:0.85rem;">"如果这是人类写的论文提交给《数学年刊》，我会毫不犹豫地推荐接收。这是AI数学发展的里程碑。"</p>
+      </div>
+      <div style="background:rgba(var(--primary-rgb),0.05);border-left:3px solid var(--primary);padding:14px 16px;border-radius:0 8px 8px 0;margin-bottom:12px;">
+        <p style="font-size:0.9rem;line-height:1.7;"><strong style="color:var(--primary);">Noga Alon</strong>（普林斯顿大学）：</p>
+        <p style="opacity:0.8;font-size:0.85rem;">"一个杰出的成就。AI在离散几何和代数数论之间架起了人类从未见过的桥梁。"</p>
+      </div>
+      <div style="background:rgba(var(--accent-rgb),0.05);border-left:3px solid var(--accent);padding:14px 16px;border-radius:0 8px 8px 0;">
+        <p style="font-size:0.9rem;line-height:1.7;"><strong style="color:var(--accent);">Arul Shankar</strong>：</p>
+        <p style="opacity:0.8;font-size:0.85rem;">"当前AI模型不再只是助手——它们能够产生原创且巧妙的想法，并将其付诸实现直至成功。"</p>
+      </div>
+      <p class="source-tag" style="margin-top:12px;">来源：OpenAI相关报道 · Scientific American · Live Science · WSJ, May 2026</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s57">
+  <div class="section-header">
+    <span class="section-label">CASE 02</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>案例二：AI视觉创作</h3>
+  <div class="grid-2" style="margin-top:20px;">
+    <div class="card">
+      <h4 style="color:var(--primary2);margin-bottom:16px;">传统海报设计流程</h4>
+      <div style="display:flex;align-items:flex-end;gap:12px;height:120px;margin-bottom:16px;">
+        <div class="bar-item"><div class="bar" style="--target-height:100px;background:linear-gradient(180deg,var(--primary2),rgba(var(--primary2-rgb),0.2));"></div><div style="font-size:0.7rem;opacity:0.6;margin-top:4px;">需求分析</div></div>
+        <div class="bar-item"><div class="bar" style="--target-height:120px;background:linear-gradient(180deg,var(--primary2),rgba(var(--primary2-rgb),0.2));"></div><div style="font-size:0.7rem;opacity:0.6;margin-top:4px;">创意构思</div></div>
+        <div class="bar-item"><div class="bar" style="--target-height:110px;background:linear-gradient(180deg,var(--primary2),rgba(var(--primary2-rgb),0.2));"></div><div style="font-size:0.7rem;opacity:0.6;margin-top:4px;">设计制作</div></div>
+        <div class="bar-item"><div class="bar" style="--target-height:80px;background:linear-gradient(180deg,var(--primary2),rgba(var(--primary2-rgb),0.2));"></div><div style="font-size:0.7rem;opacity:0.6;margin-top:4px;">修改迭代</div></div>
+      </div>
+      <div style="background:rgba(var(--primary2-rgb),0.08);border-radius:8px;padding:16px;text-align:center;">
+        <span style="font-size:2rem;font-weight:900;color:var(--primary2);">几小时-几天</span>
+        <span style="opacity:0.6;font-size:0.85rem;margin-left:8px;">总周期</span>
+      </div>
+    </div>
+    <div class="card card-glow">
+      <h4 style="color:var(--primary);margin-bottom:16px;">AI海报生成流程</h4>
+      <div style="display:flex;align-items:flex-end;gap:12px;height:120px;margin-bottom:16px;">
+        <div class="bar-item"><div class="bar" style="--target-height:30px;background:linear-gradient(180deg,var(--primary),rgba(var(--primary-rgb),0.2));"></div><div style="font-size:0.7rem;opacity:0.6;margin-top:4px;">描述需求</div></div>
+        <div class="bar-item"><div class="bar purple" style="--target-height:20px;background:linear-gradient(180deg,var(--primary2),rgba(var(--primary2-rgb),0.2));"></div><div style="font-size:0.7rem;opacity:0.6;margin-top:4px;">AI生成</div></div>
+        <div class="bar-item"><div class="bar" style="--target-height:60px;background:linear-gradient(180deg,var(--primary),rgba(var(--primary-rgb),0.2));"></div><div style="font-size:0.7rem;opacity:0.6;margin-top:4px;">调整优化</div></div>
+        <div class="bar-item"><div class="bar green" style="--target-height:20px;background:linear-gradient(180deg,var(--green),rgba(var(--green-rgb),0.2));"></div><div style="font-size:0.7rem;opacity:0.6;margin-top:4px;">定稿输出</div></div>
+      </div>
+      <div style="background:rgba(var(--primary-rgb),0.08);border-radius:8px;padding:16px;text-align:center;">
+        <span style="font-size:2rem;font-weight:900;color:var(--primary);">几分钟-几小时</span>
+        <span style="opacity:0.6;font-size:0.85rem;margin-left:8px;">总周期</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;">
+    <h4 style="color:var(--primary);margin-bottom:16px;">流程展示：从人工海报到AI海报</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+      <div style="text-align:center;">
+        <img class="clickable" src="img/hb0.jpg" style="width:100%;border-radius:10px;border:1px solid var(--border);" alt="初始人工海报" onerror="this.style.background='var(--surface2)';this.style.minHeight='200px';this.alt='(图片加载中)'">
+        <p style="font-size:0.8rem;opacity:0.6;margin-top:8px;">Step 1: 人工海报初稿</p>
+      </div>
+      <div style="text-align:center;">
+        <img class="clickable" src="img/hb1.jpg" style="width:100%;border-radius:10px;border:1px solid var(--border);" alt="AI过渡阶段" onerror="this.style.background='var(--surface2)';this.style.minHeight='200px';this.alt='(图片加载中)'">
+        <p style="font-size:0.8rem;opacity:0.6;margin-top:8px;">Step 2: AI辅助过渡</p>
+      </div>
+      <div style="text-align:center;">
+        <img class="clickable" src="img/hb2.jpg" style="width:100%;border-radius:10px;border:1px solid var(--border);" alt="AI生成海报" onerror="this.style.background='var(--surface2)';this.style.minHeight='200px';this.alt='(图片加载中)'">
+        <p style="font-size:0.8rem;opacity:0.6;margin-top:8px;">Step 3: AI海报最终版</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s58">
+  <div class="section-header">
+    <span class="section-label">CASE 02 · 续</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>AI海报生成：多方案不是终点，筛选标准才是关键</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;">
+    <div style="text-align:center;">
+      <img class="clickable" src="img/aigc0.jpg" style="width:100%;border-radius:10px;border:1px solid var(--border);" alt="AI背景方案A" onerror="this.style.background='var(--surface2)';this.style.minHeight='200px';this.alt='(图片加载中)'">
+      <p style="font-size:0.8rem;opacity:0.6;margin-top:8px;">方案A：AI生成背景</p>
+    </div>
+    <div style="text-align:center;">
+      <img class="clickable" src="img/aigc1.jpg" style="width:100%;border-radius:10px;border:1px solid var(--border);" alt="AI背景方案B" onerror="this.style.background='var(--surface2)';this.style.minHeight='200px';this.alt='(图片加载中)'">
+      <p style="font-size:0.8rem;opacity:0.6;margin-top:8px;">方案B：AI生成背景</p>
+    </div>
+    <div style="text-align:center;">
+      <img class="clickable" src="img/aigc2.jpg" style="width:100%;border-radius:10px;border:1px solid var(--border);" alt="AI背景方案C" onerror="this.style.background='var(--surface2)';this.style.minHeight='200px';this.alt='(图片加载中)'">
+      <p style="font-size:0.8rem;opacity:0.6;margin-top:8px;">方案C：AI生成背景</p>
+    </div>
+  </div>
+  <div class="card card-glow">
+    <h4 style="color:var(--primary);margin-bottom:12px;">「威尔·史密斯吃意大利面」：视频生成质量的快速演进</h4>
+    <div style="position:relative;width:72%;max-width:760px;aspect-ratio:16/9;margin:0 auto;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:#000;">
+      <iframe src="https://player.bilibili.com/player.html?isOutside=true&aid=116056005805857&bvid=BV1mzcYzZEDM&cid=36004431737&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s59">
+  <div class="section-header">
+    <span class="section-label">CASE 03</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>案例三：AI对劳动力市场的冲击</h3>
+  <p style="font-size:0.75rem;color:var(--text2);margin-bottom:12px;">Anthropic · "Labor Market Impacts of AI" — Massenkoff & McCrory, 2026.3.5</p>
+  <div class="grid-2" style="gap:16px;">
+    <div class="card card-glow">
+      <h4 style="color:var(--primary);margin-bottom:10px;">高暴露 ≠ 立刻失业：真正变化发生在“任务重组”</h4>
+      <p style="font-size:0.8rem;opacity:0.65;margin-bottom:14px;">Anthropic 用 Claude 使用数据构建“AI暴露度”指标，显示很多岗位的任务可被AI辅助或自动化，但企业部署、流程改造和责任边界仍限制落地速度</p>
+      <div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:3px;"><span>计算机与数学</span><span style="font-weight:700;color:var(--primary);">94% → 33%（61%差距）</span></div>
+        <div style="height:16px;background:rgba(0,0,0,0.04);border-radius:8px;overflow:hidden;display:flex;margin-bottom:8px;">
+          <div class="chart-bar" style="--target-width:33%;background:var(--primary);border-radius:8px;"></div>
+          <div class="chart-bar" style="--target-width:61%;background:rgba(var(--primary-rgb),0.15);"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:3px;"><span>办公与行政</span><span style="font-weight:700;color:var(--accent);">90% → 10%（80%差距）</span></div>
+        <div style="height:16px;background:rgba(0,0,0,0.04);border-radius:8px;overflow:hidden;display:flex;margin-bottom:8px;">
+          <div class="chart-bar" style="--target-width:10%;background:var(--accent);border-radius:8px;"></div>
+          <div class="chart-bar" style="--target-width:80%;background:rgba(var(--accent-rgb),0.15);"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:3px;"><span>商业与金融</span><span style="font-weight:700;color:var(--green);">94% → 28%（66%差距）</span></div>
+        <div style="height:16px;background:rgba(0,0,0,0.04);border-radius:8px;overflow:hidden;display:flex;">
+          <div class="chart-bar" style="--target-width:28%;background:var(--green);border-radius:8px;"></div>
+          <div class="chart-bar" style="--target-width:66%;background:rgba(var(--green-rgb),0.15);"></div>
+        </div>
+        <p style="font-size:0.65rem;color:var(--text2);margin-top:4px;"><span style="color:rgba(117, 117, 117, 1);">■</span> 已实际部署 &nbsp; <span style="color:rgba(0,0,0,0.2);">■</span> 理论可行但尚未部署</p>
+      </div>
+     
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="card" style="border-left:3px solid var(--primary);padding:12px 14px;">
+        <h4 style="font-size:0.9rem;color:var(--primary);margin-bottom:6px;">AI暴露最高的职业</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:0.7rem;background:rgba(var(--primary-rgb),0.08);padding:3px 8px;border-radius:4px;">程序员 75%</span>
+          <span style="font-size:0.7rem;background:rgba(var(--primary-rgb),0.08);padding:3px 8px;border-radius:4px;">客服 70%</span>
+          <span style="font-size:0.7rem;background:rgba(var(--primary-rgb),0.08);padding:3px 8px;border-radius:4px;">数据录入 67%</span>
+          <span style="font-size:0.7rem;background:rgba(var(--primary-rgb),0.08);padding:3px 8px;border-radius:4px;">市场分析师 65%</span>
+          <span style="font-size:0.7rem;background:rgba(var(--primary-rgb),0.08);padding:3px 8px;border-radius:4px;">金融分析师 57%</span>
+        </div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--accent);padding:12px 14px;">
+        <h4 style="font-size:0.9rem;color:var(--accent);margin-bottom:6px;">收入影响：高知高薪岗位首当其冲</h4>
+        <p style="font-size:0.78rem;line-height:1.5;">最高暴露人群特征：薪资比平均<strong style="color:var(--accent);">高47%</strong>、研究生学历比平均<strong style="color:var(--accent);">多近4倍</strong>。AI冲击首先体现为任务结构变化：同一个岗位中，资料整理、初稿生成、重复沟通会被加速，而判断、沟通、责任承担仍需要人。</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--green);padding:12px 14px;">
+        <h4 style="font-size:0.9rem;color:var(--green);margin-bottom:6px;">年龄结构：年轻人就业压力加剧</h4>
+        <p style="font-size:0.78rem;line-height:1.5;">22-25岁高暴露岗位就业<strong style="color:var(--accent);">下降约16%</strong>。初级岗位招聘自2023年<strong style="color:var(--accent);">下降约35%</strong>。初级岗位的训练价值被重新定义：年轻人更需要尽快掌握“AI协作+领域判断”的复合能力。</p>
+      </div>
+      <div style="background:rgba(var(--green-rgb),0.05);border-left:3px solid var(--green);padding:10px 14px;border-radius:0 8px 8px 0;">
+        <p style="font-size:0.75rem;line-height:1.5;"><strong style="color:var(--green);">未来趋势：</strong>AI的理论能力与实际部署之间存在巨大差距，这意味着<strong>岗位不会一夜消失，但“入门级、重复性、标准化”的白领任务会持续被压缩</strong>。随着部署加速，白领岗位将面临持续压力。</p>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s60">
+  <div class="section-header">
+    <span class="section-label">CASE 04</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>案例四：自然科学——AI正在进入“发现、建模、实验”流程</h3>
+  <div class="grid-2" style="margin-top:20px;">
+    <div class="card card-glow">
+      <h4 style="color:var(--primary);margin-bottom:16px;">通用模型正在成为科研“通用接口”</h4>
+      <p style="font-size:0.9rem;opacity:0.7;margin-bottom:20px;">大模型的价值不只在单项指标，而在于把文献、代码、数据、图像和实验流程接入同一个协作界面</p>
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:0.85rem;">
+          <span>GPT-4o（微调）</span><span style="color:var(--primary);font-weight:700;">82.67%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="--target-width:82.67%;"></div></div>
+      </div>
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:0.85rem;">
+          <span>DenseNet121（传统CNN）</span><span style="color:var(--green);font-weight:700;">81%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="--target-width:81%;background:linear-gradient(90deg,var(--green),rgba(var(--green-rgb),0.5));"></div></div>
+      </div>
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:0.85rem;">
+          <span>GPT-4o（零样本）</span><span style="color:var(--primary2);font-weight:700;">73.67%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="--target-width:73.67%;background:linear-gradient(90deg,var(--primary2),rgba(var(--primary2-rgb),0.5));"></div></div>
+      </div>
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:0.85rem;">
+          <span>轻量级CNN基线</span><span style="opacity:0.6;">61.67%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="--target-width:61.67%;background:rgba(0,0,0,0.1);"></div></div>
+      </div>
+      <p class="source-tag">来源：Microsoft Azure AI Foundry, Oct 2025 · AI Multiple Benchmark, Sep 2025</p>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--accent);margin-bottom:16px;">AI科研全流程自动化</h4>
+      <div style="line-height:1.8;font-size:0.9rem;">
+        <p style="margin-bottom:12px;"><strong style="color:var(--primary);">The AI Scientist</strong>（Sakana AI, 2024年8月）：首个实现完整科研流程自动化的框架，从提出假设、编写代码、执行实验到撰写论文，每篇论文成本<span style="color:var(--accent);font-weight:700;">不到15美元</span>。</p>
+        <p style="margin-bottom:12px;"><strong style="color:var(--primary);">AgentLaboratory</strong>（AMD & 约翰·霍普金斯大学, 2025年2月）：开源一站式科研AI智能体，覆盖文献检索、实验设计、代码生成到论文撰写全流程。</p>
+        <p><strong style="color:var(--primary);">data-to-paper</strong>（NEJM AI, 2024年12月）：从数据到可验证研究论文的全自动化平台，在简单研究目标中80-90%的案例能独立复现同行评审论文的发现。</p>
+      </div>
+      <div style="background:rgba(var(--primary-rgb),0.05);border-radius:8px;padding:14px;margin-top:16px;text-align:center;">
+        <span style="font-size:0.9rem;">AI正在从“工具”演变为可协助完成</span><br>
+        <span style="color:var(--primary);font-weight:700;font-size:1.1rem;">"假设提出→实验执行→结果分析"</span><br>
+        <span style="font-size:0.9rem;">流程的数字科研协作者</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s61">
+  <div class="section-header">
+    <span class="section-label">CASE 05</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>案例五：社会科学——AI擅长处理材料，不自动理解社会</h3>
+  <div class="grid-2" style="margin-top:20px;">
+    <div class="card card-glow">
+      <h4 style="color:var(--primary);margin-bottom:16px;">可用场景：把“资料密集型任务”变成可迭代流程</h4>
+      <p style="font-size:0.9rem;opacity:0.7;margin-bottom:16px;">文献检索、访谈资料整理、开放式问卷编码、变量说明、初稿润色，都可以被AI显著加速。</p>
+      <div style="line-height:1.8;font-size:0.9rem;">
+        <p>但社会科学的核心不是“材料越多越好”，而是研究问题、理论框架、样本偏差、语境解释和伦理边界。AI可以帮你更快处理材料，不能替你承担解释责任。</p>
+      </div>
+      <div style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+        <div style="background:rgba(var(--primary-rgb),0.05);border-radius:8px;padding:12px;text-align:center;">
+          <div style="color:var(--primary);font-weight:700;font-size:1.1rem;">检索</div>
+          <div style="font-size:0.75rem;opacity:0.6;">快速定位主题和争议</div>
+        </div>
+        <div style="background:rgba(var(--green-rgb),0.05);border-radius:8px;padding:12px;text-align:center;">
+          <div style="color:var(--green);font-weight:700;font-size:1.1rem;">整理</div>
+          <div style="font-size:0.75rem;opacity:0.6;">访谈/问卷材料归类</div>
+        </div>
+        <div style="background:rgba(var(--accent-rgb),0.05);border-radius:8px;padding:12px;text-align:center;">
+          <div style="color:var(--accent);font-weight:700;font-size:1.1rem;">写作</div>
+          <div style="font-size:0.75rem;opacity:0.6;">结构化初稿与修改建议</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--primary);margin-bottom:16px;">AI的优势与局限</h4>
+      <div style="line-height:1.8;font-size:0.9rem;">
+        <div style="background:rgba(var(--green-rgb),0.05);border-left:3px solid var(--green);padding:12px;border-radius:0 8px 8px 0;margin-bottom:12px;">
+          <p style="font-weight:600;color:var(--green);">AI擅长：</p>
+          <p style="opacity:0.8;font-size:0.85rem;">提炼材料 · 生成对照表 · 辅助开放式编码 · 翻译与润色 · 形成可讨论的初稿</p>
+        </div>
+        <div style="background:rgba(239,68,68,0.05);border-left:3px solid var(--red);padding:12px;border-radius:0 8px 8px 0;">
+          <p style="font-weight:600;color:var(--red);">AI短板：</p>
+          <p style="opacity:0.8;font-size:0.85rem;">样本代表性 · 价值判断 · 文化语境 · 研究伦理 · 把相关性误读为因果性</p>
+        </div>
+      </div>
+      <div class="highlight-box" style="margin-top:12px;">
+        <p style="font-size:0.85rem;line-height:1.6;"><strong>核心启示：</strong>社会科学案例最适合用来说明“AI协作不是外包思考”。真正决定研究质量的仍是<strong style="color:var(--primary);">问题意识、方法选择、理论解释和伦理自觉</strong>。</p>
+      </div>
+      <p class="source-tag" style="margin-top:8px;">来源：LLM social science research literature, PNAS / Nature Human Behaviour discussions</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide flex-center" id="s62">
+  <div>
+    <div class="data-badge" style="margin-bottom:20px;">CHAPTER 03</div>
+    <h1>AI时代的基础概念</h1>
+  </div>
+</div>
+
+<div class="slide" id="s63">
+  <div class="section-header">
+    <span class="section-label">CONCEPTS MAP 01</span>
+    <div class="section-line"></div>
+  </div>
+  <h3 style="margin-bottom:10px;">AI核心概念关系脉络（上）—— 从理论到技术</h3>
+  <div style="display:flex;gap:16px;height:calc(100% - 74px);">
+    <div id="concept-hierarchy" class="clickable" style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0;">
+      <div style="text-align:center;margin-bottom:4px;">
+        <span style="font-size:0.7rem;color:var(--text2);font-family:'JetBrains Mono',monospace;letter-spacing:0.1em;">包含层级 ▾</span>
+      </div>
+      <div class="concept-box concept-box-animate" style="width:92%;padding:12px 16px;border-color:rgba(var(--primary-rgb),0.35);background:rgba(var(--primary-rgb),0.06);transition-delay:0.1s;">
+        <div class="cn" style="font-size:1.15rem;color:var(--primary);">人工智能 AI</div>
+        <div class="en">Artificial Intelligence</div>
+        <div class="desc">能为明确或隐含目标做预测、生成、推荐或决策的系统</div>
+      </div>
+      <div class="connector-v" style="height:12px;"></div>
+      <div class="concept-box concept-box-animate" style="width:86%;padding:11px 14px;border-color:rgba(var(--primary-rgb),0.25);background:rgba(var(--primary-rgb),0.04);transition-delay:0.2s;">
+        <div class="cn" style="font-size:1.05rem;color:var(--primary);">机器学习 ML</div>
+        <div class="en">Machine Learning</div>
+        <div class="desc">从数据中学习规律，而不是逐条手写规则</div>
+      </div>
+      <div class="connector-v" style="height:12px;"></div>
+      <div class="concept-box concept-box-animate" style="width:80%;padding:11px 14px;border-color:rgba(var(--primary-rgb),0.2);background:rgba(var(--primary-rgb),0.03);transition-delay:0.3s;">
+        <div class="cn" style="font-size:1.0rem;color:var(--primary);">深度学习 DL</div>
+        <div class="en">Deep Learning</div>
+        <div class="desc">多层级神经网络，自动提取特征</div>
+      </div>
+      <div class="connector-v" style="height:12px;"></div>
+      <div class="concept-box concept-box-animate" style="width:74%;padding:11px 14px;border-color:rgba(var(--primary-rgb),0.16);background:rgba(var(--primary-rgb),0.02);transition-delay:0.4s;">
+        <div class="cn" style="font-size:0.95rem;color:var(--primary);">神经网络 NN</div>
+        <div class="en">Neural Network</div>
+        <div class="desc">模拟神经元，层级连接处理模式识别</div>
+      </div>
+      <div class="connector-v" style="height:12px;"></div>
+      <div class="concept-box concept-box-animate" style="width:68%;padding:11px 14px;border-color:rgba(var(--primary-rgb),0.12);background:rgba(var(--primary-rgb),0.02);transition-delay:0.5s;">
+        <div class="cn" style="font-size:0.95rem;color:var(--primary);">Transformer</div>
+        <div class="en">2017 · "Attention Is All You Need"</div>
+        <div class="desc">自注意力机制——GPT/LLM的基石</div>
+      </div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:10px;justify-content:center;">
+      <div style="background:rgba(var(--primary-rgb),0.04);border:1px solid rgba(var(--primary-rgb),0.12);border-radius:8px;padding:12px 14px;">
+        <div style="font-size:0.7rem;color:var(--primary);font-family:'JetBrains Mono',monospace;margin-bottom:8px;letter-spacing:0.1em;">模型技术层</div>
+        <div class="grid-2">
+          <div class="concept-box">
+            <div class="cn" style="font-size:0.9rem;color:var(--primary);">大语言模型</div>
+            <div class="en">LLM</div>
+            <div class="desc">基于大量文本和指令数据训练，擅长语言、代码和推理式生成</div>
+          </div>
+          <div class="concept-box">
+            <div class="cn" style="font-size:0.9rem;color:var(--primary);">AIGC</div>
+            <div class="en">AI Generated Content</div>
+            <div class="desc">AI生成文本、图像、音频、视频和代码等内容</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(var(--primary2-rgb),0.04);border:1px solid rgba(var(--primary2-rgb),0.12);border-radius:8px;padding:12px 14px;">
+        <div style="font-size:0.7rem;color:var(--primary2);font-family:'JetBrains Mono',monospace;margin-bottom:8px;letter-spacing:0.1em;">模型生产过程</div>
+        <div class="grid-2">
+          <div class="concept-box">
+            <div class="cn" style="font-size:0.9rem;color:var(--primary2);">模型训练</div>
+            <div class="en">Training</div>
+            <div class="desc">海量数据+算力 → 模型学习参数</div>
+          </div>
+          <div class="concept-box">
+            <div class="cn" style="font-size:0.9rem;color:var(--primary2);">模型蒸馏</div>
+            <div class="en">Distillation</div>
+            <div class="desc">大模型知识 → 压缩到小模型</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(var(--primary2-rgb),0.04);border:1px solid rgba(var(--primary2-rgb),0.12);border-radius:8px;padding:12px 14px;">
+        <div style="font-size:0.7rem;color:var(--primary2);font-family:'JetBrains Mono',monospace;margin-bottom:8px;letter-spacing:0.1em;">人与AI交互方式</div>
+        <div class="grid-2">
+          <div class="concept-box">
+            <div class="cn" style="font-size:0.9rem;color:var(--primary2);">Prompt</div>
+            <div class="en">提示词工程</div>
+            <div class="desc">用上下文、目标、约束和验收标准引导AI输出</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div class="concept-box" style="flex:1;">
+              <div class="cn" style="font-size:0.85rem;color:var(--primary2);">Vibe Coding</div>
+              <div class="desc">快速对话式原型，适合探索，不适合直接上线</div>
+            </div>
+            <div class="concept-box" style="flex:1;">
+              <div class="cn" style="font-size:0.85rem;color:var(--primary2);">Spec Coding</div>
+              <div class="desc">用规格、测试和验收标准驱动AI实现</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s64">
+  <div class="section-header">
+    <span class="section-label">CONCEPTS MAP 02</span>
+    <div class="section-line"></div>
+  </div>
+  <h3 style="margin-bottom:10px;">AI核心概念关系脉络（下）—— 智能体与工程落地</h3>
+  <div style="display:flex;gap:16px;height:calc(100% - 74px);">
+    <div style="flex:1.1;display:flex;flex-direction:column;gap:10px;justify-content:center;">
+      <div style="background:rgba(var(--primary-rgb),0.04);border:1px solid rgba(var(--primary-rgb),0.12);border-radius:8px;padding:12px 14px;">
+        <div style="font-size:0.7rem;color:var(--primary);font-family:'JetBrains Mono',monospace;margin-bottom:8px;letter-spacing:0.1em;">通信协议标准</div>
+        <div class="concept-box" style="border-color:rgba(var(--primary-rgb),0.25);background:rgba(var(--primary-rgb),0.04);">
+          <div class="cn" style="font-size:0.95rem;color:var(--primary);">MCP 模型上下文协议</div>
+          <div class="en">Model Context Protocol · Anthropic 2024</div>
+          <div class="desc">让AI系统以标准方式连接外部工具、数据源和工作流</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:4px;padding:0;">
+        <span style="font-size:0.65rem;color:var(--text2);">通过MCP协议集成 ↓</span>
+      </div>
+      <div style="background:rgba(var(--primary2-rgb),0.04);border:1px solid rgba(var(--primary2-rgb),0.12);border-radius:8px;padding:12px 14px;">
+        <div style="font-size:0.7rem;color:var(--primary2);font-family:'JetBrains Mono',monospace;margin-bottom:8px;letter-spacing:0.1em;">智能体核心</div>
+        <div class="grid-2">
+          <div class="concept-box">
+            <div class="cn" style="font-size:0.9rem;color:var(--primary2);">智能体 Agent</div>
+            <div class="en">AI Agent</div>
+            <div class="desc">模型 + 目标 + 记忆 + 规划 + 工具调用</div>
+          </div>
+          <div class="concept-box">
+            <div class="cn" style="font-size:0.9rem;color:var(--primary2);">Skill / 工具能力</div>
+            <div class="en">Tool / Capability Module</div>
+            <div class="desc">可被Agent调用的能力单元<br>搜索/代码/文件/API/浏览器</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:4px;padding:0;">
+        <span style="font-size:0.65rem;color:var(--text2);">工程实现模式 ↓</span>
+      </div>
+      <div style="background:rgba(var(--primary2-rgb),0.04);border:1px solid rgba(var(--primary2-rgb),0.12);border-radius:8px;padding:12px 14px;">
+        <div class="concept-box">
+          <div class="cn" style="font-size:0.95rem;color:var(--primary2);">RAG / Workflow / Agent</div>
+          <div class="en">检索增强 · 工作流编排 · 工具调用</div>
+          <div class="desc">把模型嵌入真实业务流程，而不是只停留在聊天框</div>
+        </div>
+      </div>
+    </div>
+    <div style="flex:0.9;display:flex;flex-direction:column;gap:10px;justify-content:center;">
+      <div style="background:rgba(var(--green-rgb),0.04);border:1px solid rgba(var(--green-rgb),0.12);border-radius:8px;padding:12px 14px;">
+        <div style="font-size:0.7rem;color:var(--green);font-family:'JetBrains Mono',monospace;margin-bottom:8px;letter-spacing:0.1em;">工程落地层</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="grid-2">
+            <div class="concept-box">
+              <div class="cn" style="font-size:0.9rem;color:var(--green);">AI应用</div>
+              <div class="en">AI Application</div>
+              <div class="desc">面向最终用户的产品</div>
+            </div>
+            <div class="concept-box">
+              <div class="cn" style="font-size:0.9rem;color:var(--green);">本地部署</div>
+              <div class="en">Local Deployment</div>
+              <div class="desc">私有化运行·数据安全</div>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="concept-box">
+              <div class="cn" style="font-size:0.9rem;color:var(--green);">知识库</div>
+              <div class="en">Knowledge Base</div>
+              <div class="desc">外部知识存储与RAG检索</div>
+            </div>
+            <div class="concept-box">
+              <div class="cn" style="font-size:0.9rem;color:var(--green);">小团队增强</div>
+              <div class="en">Human + AI Workflow</div>
+              <div class="desc">个人或小团队获得更高执行密度</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-glow" style="padding:14px;text-align:center;">
+        <p style="font-size:0.85rem;line-height:1.6;opacity:0.85;">
+          <span style="color:var(--primary);font-weight:700;">MCP协议</span>
+          <span style="margin:0 4px;">→</span>
+          <span style="color:var(--primary2);font-weight:700;">Agent/Skill</span>
+          <span style="margin:0 4px;">→</span>
+          <span style="color:var(--primary2);font-weight:700;">工作流编排</span>
+          <span style="margin:0 4px;">→</span>
+          <span style="color:var(--green);font-weight:700;">AI应用落地</span>
+        </p>
+        <p style="font-size:0.8rem;opacity:0.6;margin-top:6px;">从「聊天对话」到「工具调用」——AI应用的关键是可靠地接入真实流程</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide flex-center" id="s65">
+  <div>
+    <div class="data-badge" style="margin-bottom:20px;">CHAPTER 04</div>
+    <h1>非技术者的优势</h1>
+  </div>
+</div>
+
+<div class="slide" id="s66">
+  <div class="section-header">
+    <span class="section-label">ADVANTAGE 01</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>技术门槛抹平：专业人士拿回话语权</h3>
+  <p style="opacity:0.72;margin-bottom:22px;font-size:1.05rem;line-height:1.7;">AI产品的应用落地使技术门槛大幅降低，原本在各自领域的专业人士重新掌握了创作主导权。</p>
+  <div class="grid-2" style="gap:18px;">
+    <div class="card card-glow" style="min-height:210px;">
+      <div style="font-size:2.4rem;margin-bottom:10px;">🎬</div>
+      <h4 style="color:var(--primary);">AIGC电影创作</h4>
+      <p style="opacity:0.8;font-size:1rem;line-height:1.7;">好的AIGC电影仍需要<strong>导演</strong>把控叙事节奏、<strong>视听类人才</strong>设计镜头语言——AI生成画面，但故事和情感由人定义。</p>
+    </div>
+    <div class="card card-glow" style="min-height:210px;">
+      <div style="font-size:2.4rem;margin-bottom:10px;">🎨</div>
+      <h4 style="color:var(--accent);">AI艺术设计</h4>
+      <p style="opacity:0.8;font-size:1rem;line-height:1.7;">高艺术性的AI海报仍需要<strong>设计师</strong>定义风格、调整细节、把控审美——AI是画笔，人是画家。</p>
+    </div>
+    <div class="card card-glow" style="min-height:210px;">
+      <div style="font-size:2.4rem;margin-bottom:10px;">🎮</div>
+      <h4 style="color:var(--green);">游戏开发</h4>
+      <p style="opacity:0.8;font-size:1rem;line-height:1.7;">好的游戏仍需要<strong>深谙用户心理的游戏从业者</strong>设计玩法和体验——AI生成素材，人设计体验。</p>
+    </div>
+    <div class="card card-glow" style="min-height:210px;">
+      <div style="font-size:2.4rem;margin-bottom:10px;">📖</div>
+      <h4 style="color:var(--primary2);">文学创作</h4>
+      <p style="opacity:0.8;font-size:1rem;line-height:1.7;">好的剧本仍需要<strong>文学创作者</strong>给出大框架、遴选和优化内容——AI生成文本，人赋予灵魂。</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s67">
+  <div class="section-header">
+    <span class="section-label">THE ESSENCE</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>话语权的本质：谁能定义好问题，谁就能指挥AI</h3>
+  <div class="grid-3" style="margin-top:30px;">
+    <div class="card card-glow" style="text-align:center;">
+      <div style="font-size:3rem;margin-bottom:8px;">💻</div>
+      <div style="font-size:0.7rem;color:var(--text2);margin-bottom:4px;">【计算机/软件工程领域】</div>
+      <h4 style="color:var(--primary);margin-bottom:12px;">工程架构能力</h4>
+      <p style="opacity:0.8;font-size:0.85rem;line-height:1.6;">程序员对<strong style="color:var(--primary);">复杂项目</strong>的工程架构与管理能力</p>
+    </div>
+    <div class="card card-glow" style="text-align:center;">
+      <div style="font-size:3rem;margin-bottom:8px;">🎬</div>
+      <div style="font-size:0.7rem;color:var(--text2);margin-bottom:4px;">【影视/创意领域】</div>
+      <h4 style="color:var(--accent);margin-bottom:12px;">视听引导能力</h4>
+      <p style="opacity:0.8;font-size:0.85rem;line-height:1.6;">导演对AI片段生产的<strong style="color:var(--accent);">视听描述</strong>与抽卡遴选能力</p>
+    </div>
+    <div class="card card-glow" style="text-align:center;">
+      <div style="font-size:3rem;margin-bottom:8px;">🎨</div>
+      <div style="font-size:0.7rem;color:var(--text2);margin-bottom:4px;">【设计/艺术领域】</div>
+      <h4 style="color:var(--green);margin-bottom:12px;">审美方向能力</h4>
+      <p style="opacity:0.8;font-size:0.85rem;line-height:1.6;">设计师对<strong style="color:var(--green);">风格、美感</strong>的方向引导能力</p>
+    </div>
+  </div>
+  
+  <div class="highlight-box" style="margin-top:16px;">
+    <p style="font-size:0.95rem;line-height:1.8;">
+      <strong style="color:var(--red);">低质量、重复性、缺少判断的工作更容易被AI替代或压价</strong>，因为任何外行都可以依托AI完成原本有专业门槛的基础工作。
+    </p>
+  </div>
+  <div style="margin-top:16px;display:flex;gap:12px;">
+    <div style="flex:1;padding:12px;background:rgba(var(--accent-rgb),0.05);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;">
+      <p style="font-size:0.8rem;opacity:0.9;">📚 语文老师说："我需要一个学生点名的工具" → AI生成友好界面应用</p>
+    </div>
+    <div style="flex:1;padding:12px;background:rgba(var(--green-rgb),0.05);border-left:3px solid var(--green);border-radius:0 8px 8px 0;">
+      <p style="font-size:0.8rem;opacity:0.9;">📖 武侠爱好者将小说文本输入即梦 → AI生成对应片段视频</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s68">
+  <div class="section-header">
+    <span class="section-label">CORE ABILITIES</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>AI时代的核心能力：把模糊意图变成可执行、可验收的任务</h3>
+  <div style="text-align:center;font-size:1.1rem;color:var(--accent);margin-bottom:24px;">定义问题 · 拆解任务 · 约束边界 · 验证结果</div>
+  
+  <div class="grid-4" style="gap:12px;">
+    <div class="card card-glow">
+      <div style="text-align:center;margin-bottom:16px;">
+        <h4 style="color:var(--primary);font-size:1.2rem;">定义问题</h4>
+      </div>
+      <div style="line-height:1.7;font-size:0.85rem;opacity:0.85;">
+        <p>• <strong style="color:var(--primary);">目标：</strong>谁使用？解决什么问题？为什么现在要做？</p>
+        <p>• <strong style="color:var(--primary);">场景：</strong>在什么环境、设备、流程中发生？</p>
+        <p>• <strong style="color:var(--primary);">成功标准：</strong>什么结果才算可用，而不只是“好看”？</p>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:rgba(var(--primary-rgb),0.05);border-radius:6px;">
+        <p style="font-size:0.75rem;color:var(--primary);text-align:center;">先定义问题，再请求答案</p>
+      </div>
+    </div>
+    
+    <div class="card card-glow">
+      <div style="text-align:center;margin-bottom:16px;">
+        <h4 style="color:var(--accent);font-size:1.2rem;">拆解任务</h4>
+      </div>
+      <div style="line-height:1.7;font-size:0.85rem;opacity:0.85;">
+        <p>• <strong style="color:var(--accent);">任务拆解：</strong>将复杂目标分解为AI可执行、可检查的子任务</p>
+        <p>• <strong style="color:var(--accent);">流程编排：</strong>安排不同工具/模型在合适环节协作</p>
+        <p>• <strong style="color:var(--accent);">检查清单：</strong>把需求转成验收标准，避免“看起来对，其实不可用”</p>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:rgba(var(--accent-rgb),0.05);border-radius:6px;">
+        <p style="font-size:0.75rem;color:var(--accent);text-align:center;">从“提需求”升级为“拆任务”</p>
+      </div>
+    </div>
+
+    <div class="card card-glow">
+      <div style="text-align:center;margin-bottom:16px;">
+        <h4 style="color:var(--primary2);font-size:1.2rem;">约束边界</h4>
+      </div>
+      <div style="line-height:1.7;font-size:0.85rem;opacity:0.85;">
+        <p>• <strong style="color:var(--primary2);">资源约束：</strong>时间、预算、素材、技术栈和设备环境</p>
+        <p>• <strong style="color:var(--primary2);">风险约束：</strong>隐私、版权、安全、合规和伦理边界</p>
+        <p>• <strong style="color:var(--primary2);">输出约束：</strong>格式、尺寸、性能、兼容性和交付标准</p>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:rgba(var(--primary2-rgb),0.05);border-radius:6px;">
+        <p style="font-size:0.75rem;color:var(--primary2);text-align:center;">先定边界，再让AI发挥</p>
+      </div>
+    </div>
+    
+    <div class="card card-glow">
+      <div style="text-align:center;margin-bottom:16px;">
+        <h4 style="color:var(--green);font-size:1.2rem;">验证结果</h4>
+      </div>
+      <div style="line-height:1.7;font-size:0.85rem;opacity:0.85;">
+        <p>• <strong style="color:var(--green);">事实核查：</strong>要求来源、日期、假设和不确定性</p>
+        <p>• <strong style="color:var(--green);">用户路径：</strong>按真实场景测试，而不只看截图</p>
+        <p>• <strong style="color:var(--green);">风险边界：</strong>识别隐私、安全、版权和伦理问题</p>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:rgba(var(--green-rgb),0.05);border-radius:6px;">
+        <p style="font-size:0.75rem;color:var(--green);text-align:center;">没有验证，生成越快风险越大</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="card" style="margin-top:18px;background:rgba(var(--primary-rgb),0.04);">
+    <h4 style="color:var(--primary);margin-bottom:10px;">示例：用AI做一个“课堂点名与反馈”小工具</h4>
+    <div class="grid-4" style="gap:10px;font-size:0.78rem;line-height:1.6;">
+      <div><strong style="color:var(--primary);">1. 定义问题：</strong>老师需要快速点名、记录缺勤，并收集课后1分钟反馈。</div>
+      <div><strong style="color:var(--accent);">2. 拆解任务：</strong>先做学生名单导入，再做点名按钮，最后做反馈统计。</div>
+      <div><strong style="color:var(--primary2);">3. 约束边界：</strong>不上传真实身份证号；数据只保存在本地；手机端可用。</div>
+      <div><strong style="color:var(--green);">4. 验证结果：</strong>用10名虚拟学生走完整流程，故意漏填、重复点名、缩小屏幕测试。</div>
+    </div>
+  </div>
+</div>
+
+<div class="slide flex-center" id="s69">
+  <div>
+    <div class="data-badge" style="margin-bottom:20px;">CHAPTER 05</div>
+    <h1>与AI协作构建应用</h1>
+  </div>
+</div>
+
+<div class="slide" id="s70">
+  <div class="section-header">
+    <span class="section-label">MINDSET</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>核心转变：从“让AI帮我做”变成“我管理一个AI协作流程”</h3>
+  <div class="grid-2" style="margin-top:16px;gap:16px;">
+    <div class="card" style="border-left:3px solid var(--red);">
+      <h4 style="color:var(--red);font-size:0.9rem;margin-bottom:10px;">低效：把AI当许愿机</h4>
+      <div style="line-height:2;font-size:0.8rem;">
+        <p>• 一次说一个很大的愿望</p>
+        <p>• 只看第一版是否惊艳</p>
+        <p>• 不说明边界、数据和验收标准</p>
+        <p>• 出错后让AI“全部重做”</p>
+        <p>• 把生成结果直接当成最终结果</p>
+      </div>
+    </div>
+    <div class="card card-glow" style="border-left:3px solid var(--green);">
+      <h4 style="color:var(--green);font-size:0.9rem;margin-bottom:10px;">有效：把AI当协作团队</h4>
+      <div style="line-height:2;font-size:0.8rem;">
+        <p>• 先写目标、用户、约束和验收标准</p>
+        <p>• 每次只推进一个可检查的任务</p>
+        <p>• 用截图、日志、测试结果反馈问题</p>
+        <p>• 保留可用版本，再继续迭代</p>
+        <p>• 重要场景请专业人员复核</p>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:16px;display:flex;gap:12px;">
+    <div class="card" style="flex:1;text-align:center;padding:14px;">
+      <div style="font-size:1.8rem;margin-bottom:6px;">🎬</div>
+      <div style="font-weight:700;color:var(--primary);font-size:0.9rem;">你 = 导演</div>
+      <div style="font-size:0.7rem;opacity:0.6;">定义方向、把控质量、做出决策</div>
+    </div>
+    <div style="font-size:1.5rem;color:var(--primary);align-self:center;">+</div>
+    <div class="card" style="flex:1;text-align:center;padding:14px;">
+      <div style="font-size:1.8rem;margin-bottom:6px;">🤖</div>
+      <div style="font-weight:700;color:var(--accent);font-size:0.9rem;">AI = 执行团队</div>
+      <div style="font-size:0.7rem;opacity:0.6;">写代码、画UI、调布局、修bug</div>
+    </div>
+    <div style="font-size:1.5rem;color:var(--primary);align-self:center;">=</div>
+    <div class="card card-glow" style="flex:1.3;text-align:center;padding:14px;background:rgba(var(--green-rgb),0.06);">
+      <div style="font-size:1.8rem;margin-bottom:6px;">🚀</div>
+      <div style="font-weight:700;color:var(--green);font-size:0.9rem;">可运行应用</div>
+      <div style="font-size:0.7rem;opacity:0.6;">想法→产品，几小时完成</div>
+    </div>
+  </div>
+  <div style="margin-top:12px;background:rgba(var(--primary-rgb),0.04);border-radius:8px;padding:10px 14px;text-align:center;">
+    <p style="font-size:0.8rem;opacity:0.7;"><strong style="color:var(--primary);">关于 Vibe Coding：</strong>它适合快速探索和原型验证；一旦涉及真实用户、数据、支付、隐私或安全，就必须转向规格、测试和人工复核。</p>
+  </div>
+</div>
+
+<div class="slide" id="s71">
+  <div class="section-header">
+    <span class="section-label">METHOD 01</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>方法一：Prompt四要素——让AI知道“要什么、像什么、不能怎样、如何验收”</h3>
+  <div class="grid-4" style="margin-top:12px;gap:10px;">
+    <div class="card card-glow" style="text-align:center;padding:14px 10px;">
+      <div style="font-size:1.6rem;margin-bottom:4px;">📋</div>
+      <div style="font-weight:700;color:var(--primary);font-size:1rem;margin-bottom:4px;">目标</div>
+      <div style="font-size:0.82rem;opacity:0.65;">做什么产品？给谁用？</div>
+    </div>
+    <div class="card card-glow" style="text-align:center;padding:14px 10px;">
+      <div style="font-size:1.6rem;margin-bottom:4px;">🎨</div>
+      <div style="font-weight:700;color:var(--accent);font-size:1rem;margin-bottom:4px;">风格</div>
+      <div style="font-size:0.82rem;opacity:0.65;">什么视觉风格？调性？</div>
+    </div>
+    <div class="card card-glow" style="text-align:center;padding:14px 10px;">
+      <div style="font-size:1.6rem;margin-bottom:4px;">⚙️</div>
+      <div style="font-weight:700;color:var(--primary2);font-size:1rem;margin-bottom:4px;">约束</div>
+      <div style="font-size:0.82rem;opacity:0.65;">技术边界？不能用什么？</div>
+    </div>
+    <div class="card card-glow" style="text-align:center;padding:14px 10px;">
+      <div style="font-size:1.6rem;margin-bottom:4px;">✅</div>
+      <div style="font-weight:700;color:var(--green);font-size:1rem;margin-bottom:4px;">验收</div>
+      <div style="font-size:0.82rem;opacity:0.65;">怎样算成功？</div>
+    </div>
+  </div>
+  <div class="grid-2" style="margin-top:16px;gap:12px;">
+    <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:8px;padding:12px;">
+      <p style="font-weight:700;color:var(--red);font-size:0.95rem;margin-bottom:6px;">❌ 模糊Prompt</p>
+      <div style="font-size:0.84rem;color:var(--red);opacity:0.8;background:rgba(239,68,68,0.08);padding:6px 8px;border-radius:4px;margin-bottom:8px;">"帮我做一个好看的页面"</div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px;">
+        <p style="font-size:0.84rem;opacity:0.5;text-align:center;margin-bottom:6px;">AI产出结果 ⬇</p>
+        <div style="background:#fff;border:1px dashed #ddd;border-radius:4px;padding:8px;text-align:center;">
+          <div style="font-size:0.78rem;color:#999;margin-bottom:4px;">随机生成的页面</div>
+          <div style="width:100%;height:8px;background:#eee;border-radius:4px;margin-bottom:4px;"></div>
+          <div style="width:60%;height:8px;background:#eee;border-radius:4px;margin-bottom:4px;"></div>
+          <div style="width:80%;height:8px;background:#eee;border-radius:4px;"></div>
+          <div style="font-size:0.74rem;color:#ccc;margin-top:6px;">风格不确定 · 内容空洞 · 需反复修改</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;padding:12px;">
+      <p style="font-weight:700;color:var(--green);font-size:0.95rem;margin-bottom:6px;">✅ 四要素Prompt</p>
+      <div style="font-size:0.84rem;color:var(--green);opacity:0.8;background:rgba(34,197,94,0.08);padding:6px 8px;border-radius:4px;margin-bottom:8px;line-height:1.5;">"做一个极简风格的个人作品集网站。<br>目标：展示设计作品，吸引潜在客户。<br>风格：深蓝+白色，留白多，干净。<br>约束：纯HTML/CSS，单页，移动端适配。<br>验收：页面加载快，视觉专业。"</div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px;">
+        <p style="font-size:0.84rem;opacity:0.5;text-align:center;margin-bottom:6px;">AI产出结果 ⬇</p>
+        <div style="background:linear-gradient(135deg,#1a365d,#2c5282);border-radius:4px;padding:10px;text-align:center;color:#fff;">
+          <div style="font-size:0.84rem;font-weight:700;margin-bottom:4px;">MY PORTFOLIO</div>
+          <div style="width:50%;height:6px;background:rgba(255,255,255,0.2);border-radius:3px;margin:0 auto 4px;"></div>
+          <div style="width:35%;height:6px;background:rgba(255,255,255,0.15);border-radius:3px;margin:0 auto 4px;"></div>
+          <div style="display:flex;gap:4px;margin-top:6px;justify-content:center;">
+            <div style="width:30px;height:20px;background:rgba(255,255,255,0.2);border-radius:2px;"></div>
+            <div style="width:30px;height:20px;background:rgba(255,255,255,0.2);border-radius:2px;"></div>
+            <div style="width:30px;height:20px;background:rgba(255,255,255,0.2);border-radius:2px;"></div>
+          </div>
+          <div style="font-size:0.74rem;margin-top:4px;opacity:0.7;">专业 · 一致 · 一次生成接近成品</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s72">
+  <div class="section-header">
+    <span class="section-label">METHOD 02</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>方法二：描述系统，而不只描述屏幕</h3>
+  <p style="font-size:1rem;opacity:0.65;margin-bottom:12px;">页面只是结果，系统才是规则：数据从哪里来、用户如何流转、异常如何处理。</p>
+  <div class="grid-2" style="gap:12px;">
+    <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:8px;padding:12px;">
+      <p style="font-weight:700;color:var(--red);font-size:1rem;margin-bottom:6px;">❌ 屏幕思维（只描述UI）</p>
+      <div style="font-size:0.9rem;color:var(--red);opacity:0.8;background:rgba(239,68,68,0.08);padding:8px 10px;border-radius:4px;margin-bottom:8px;">"创建一个登录页面，有邮箱输入框、密码输入框和登录按钮"</div>
+      <div style="background:#fff;border:1px solid #ddd;border-radius:6px;padding:10px;text-align:center;">
+        <div style="font-size:0.82rem;color:#999;margin-bottom:6px;">AI只生成一个静态页面</div>
+        <div style="border:1px solid #ddd;border-radius:4px;padding:8px;width:140px;margin:0 auto;">
+          <div style="font-size:0.72rem;color:#999;margin-bottom:4px;">Login</div>
+          <div style="width:100%;height:8px;background:#eee;border-radius:2px;margin-bottom:3px;"></div>
+          <div style="width:100%;height:8px;background:#eee;border-radius:2px;margin-bottom:3px;"></div>
+          <div style="width:60%;height:10px;background:#ddd;border-radius:2px;margin:0 auto;"></div>
+        </div>
+        <div style="font-size:0.78rem;color:var(--red);margin-top:6px;">没有注册、没有验证、没有错误处理</div>
+      </div>
+    </div>
+    <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;padding:12px;">
+      <p style="font-weight:700;color:var(--green);font-size:1rem;margin-bottom:6px;">✅ 系统思维（描述行为）</p>
+      <div style="font-size:0.9rem;color:var(--green);opacity:0.8;background:rgba(34,197,94,0.08);padding:8px 10px;border-radius:4px;margin-bottom:8px;line-height:1.5;">"创建用户认证系统。注册页收集邮箱+密码，创建用户记录。登录页验证凭据，成功跳转首页。未登录访问内页重定向到登录。密码错误显示提示。支持记住我功能。"</div>
+      <div style="background:#fff;border:1px solid #ddd;border-radius:6px;padding:10px;text-align:center;">
+        <div style="font-size:0.82rem;color:#999;margin-bottom:8px;">AI生成完整认证流程</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:6px;">
+          <div style="border:1px solid #F8C8D0;border-radius:5px;padding:6px;font-size:0.68rem;background:#eff6ff;"><strong>1 注册页</strong><br>邮箱+密码</div>
+          <div style="border:1px solid #F8C8D0;border-radius:5px;padding:6px;font-size:0.68rem;background:#eff6ff;"><strong>2 创建用户</strong><br>写入用户记录</div>
+          <div style="border:1px solid #F8C8D0;border-radius:5px;padding:6px;font-size:0.68rem;background:#eff6ff;"><strong>3 登录验证</strong><br>检查凭据</div>
+          <div style="border:1px solid #F8C8D0;border-radius:5px;padding:6px;font-size:0.68rem;background:#eff6ff;"><strong>4 会话状态</strong><br>记住登录</div>
+          <div style="border:1px solid #F8C8D0;border-radius:5px;padding:6px;font-size:0.68rem;background:#eff6ff;"><strong>5 权限保护</strong><br>未登录跳转</div>
+          <div style="border:1px solid #F8C8D0;border-radius:5px;padding:6px;font-size:0.68rem;background:#eff6ff;"><strong>6 错误处理</strong><br>空值/密码错误</div>
+        </div>
+        <div style="font-size:0.78rem;color:var(--green);">完整流程 · 数据状态 · 权限边界 · 错误反馈</div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:10px;padding:10px 14px;background:rgba(var(--primary-rgb),0.04);">
+    <h4 style="font-size:1rem;color:var(--primary);margin-bottom:4px;">系统思维三要素</h4>
+    <div style="display:flex;gap:16px;font-size:0.9rem;opacity:0.75;">
+      <div><strong style="color:var(--primary);">数据模型：</strong>有哪些对象？字段？关系？</div>
+      <div><strong style="color:var(--primary);">用户流程：</strong>谁在什么场景下做什么？</div>
+      <div><strong style="color:var(--primary);">异常边界：</strong>空状态、错误、权限、隐私怎么办？</div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s73">
+  <div class="section-header">
+    <span class="section-label">METHOD 03</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>方法三：迭代优化——从"一步到位"到"对话式精进"</h3>
+  <div style="display:flex;gap:12px;margin-top:10px;">
+    <div class="card" style="flex:1;border-left:3px solid var(--red);padding:10px;">
+      <h4 style="font-size:0.8rem;color:var(--red);margin-bottom:6px;">低效做法</h4>
+      <div style="font-size:0.7rem;line-height:1.6;opacity:0.7;">
+        <p>Round 1："做个网站"</p>
+        <p style="color:var(--red);">→ AI给了个基础页面</p>
+        <p>Round 2："全部重做，要好看"</p>
+        <p style="color:var(--red);">→ AI推到重来，丢失之前内容</p>
+        <p>Round 3："还是不对，算了"</p>
+        <p style="color:var(--red);">→ 放弃</p>
+      </div>
+    </div>
+    <div class="card card-glow" style="flex:1.8;border-left:3px solid var(--green);padding:10px;">
+      <h4 style="font-size:0.8rem;color:var(--green);margin-bottom:6px;">有效做法：分层迭代</h4>
+      <div style="font-size:0.7rem;line-height:1.6;opacity:0.7;">
+        <p><strong>Round 1 骨架：</strong>"做一个产品展示页，顶部导航+中间网格+底部联系"</p>
+        <p style="color:var(--green);">→ 确认整体结构 OK</p>
+        <p><strong>Round 2 风格：</strong>"改成深色主题，卡片圆角加大，加hover效果"</p>
+        <p style="color:var(--green);">→ 只改样式，不动结构</p>
+        <p><strong>Round 3 细节：</strong>"导航栏固定顶部，卡片加阴影，字体调大"</p>
+        <p style="color:var(--green);">→ 精修细节，逐步打磨</p>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:12px;">
+    <div class="card" style="padding:14px 18px;">
+      <h4 style="font-size:1rem;color:var(--primary);margin-bottom:8px;">迭代黄金法则</h4>
+      <div class="grid-4" style="font-size:0.86rem;line-height:1.7;opacity:0.76;gap:12px;">
+        <p>1. <strong>先骨架后细节</strong>——结构对了再调样式</p>
+        <p>2. <strong>一次只改一个维度</strong>——布局/颜色/内容分步改</p>
+        <p>3. <strong>保留可用版本</strong>——每次大改前留备份</p>
+        <p>4. <strong>具体反馈</strong>——不说"不好看"，说"颜色太暗"</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s74">
+  <div class="section-header">
+    <span class="section-label">METHOD 04</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>方法四：上下文管理——用项目说明固化意图与边界</h3>
+  <div class="grid-2" style="margin-top:12px;gap:16px;">
+    <div class="card card-glow">
+      <h4 style="color:var(--primary);font-size:0.9rem;margin-bottom:8px;">项目说明：AI的“共享记忆”</h4>
+      <p style="font-size:0.75rem;opacity:0.6;margin-bottom:10px;">复杂项目先写一份计划文档，减少AI在长对话中遗忘目标、改丢边界。</p>
+      <div style="background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:6px;padding:10px;font-family:'JetBrains Mono',monospace;font-size:0.6rem;line-height:1.5;">
+        <div style="color:var(--primary);"># Project Plan: 个人博客</div>
+        <div style="opacity:0.7;">## 技术栈: HTML+CSS+JS</div>
+        <div style="opacity:0.7;">## 页面结构: 首页/文章页/关于</div>
+        <div style="opacity:0.7;">## 数据模型: 文章{标题,日期,标签,内容}</div>
+        <div style="opacity:0.7;">## 设计风格: 极简,衬线字体,黑白灰</div>
+        <div style="opacity:0.7;">## 功能清单: [搜索] [标签筛选] [RSS]</div>
+        <div style="opacity:0.7;">## 验收: 搜索准确,移动端可用,无敏感数据</div>
+      </div>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--primary);font-size:0.9rem;margin-bottom:8px;">分治策略：一次只推进一个可验收单元</h4>
+      <p style="font-size:0.75rem;opacity:0.6;margin-bottom:10px;">不要一次让AI做所有事，每次只做一个完整、可测试、可回退的单元。</p>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.72rem;">
+          <span style="background:var(--primary);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;">1</span>
+          <span>"先做顶部导航栏——固定、深色背景、三个链接"</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.72rem;">
+          <span style="background:var(--accent);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;">2</span>
+          <span>"在导航下方添加文章列表——卡片式、每行3个"</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.72rem;">
+          <span style="background:var(--primary2);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;">3</span>
+          <span>"添加搜索框——实时过滤、防抖、高亮匹配"</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.72rem;">
+          <span style="background:var(--green);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;">4</span>
+          <span>"添加底部——版权信息、社交媒体链接"</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:10px;padding:10px 14px;background:rgba(var(--primary-rgb),0.04);">
+    <h4 style="font-size:0.8rem;color:var(--primary);margin-bottom:4px;">关键时刻：建立检查点</h4>
+    <p style="font-size:0.72rem;opacity:0.7;line-height:1.6;">每次完成一个功能，先确认可用，再继续下一个。如果后续改坏了，可以回到上一个稳定版本——<strong style="color:var(--accent);">不要在没有备份和验收的情况下让AI做大范围重构</strong>。</p>
+  </div>
+</div>
+
+<div class="slide" id="s75">
+  <div class="section-header">
+    <span class="section-label">CLASSROOM EVIDENCE</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>AI协作构建能力也存在巨大的差距</h3>
+  <p style="font-size:0.9rem;opacity:0.68;margin-bottom:16px;">主讲人研究生相关课程中期实验测验：一个原本接近工科本科毕业设计工作量的任务，被压缩到 3 小时课堂时间内完成。</p>
+  <div class="grid-2" style="gap:18px;">
+    <div class="card card-glow">
+      <h4 style="color:var(--primary);margin-bottom:12px;">测验任务</h4>
+      <div style="font-size:0.88rem;line-height:1.9;opacity:0.78;">
+        <p><strong style="color:var(--primary);">目标：</strong>构建一个 Web 应用，调用云端大模型能力，实现猫咪图片鉴定任务</p>
+        <p><strong style="color:var(--primary);">完整流程：</strong>上传图片 → AI 鉴定 → 历史管理 → 可视化图表呈现</p>
+        <p><strong style="color:var(--primary);">能力要求：</strong>前端交互、云端模型调用、结果结构化、数据持久化、图表展示</p>
+        <p><strong style="color:var(--primary);">时间压力：</strong>3 小时课堂内完成一个原本可作为工科本科毕业设计工作量的系统原型</p>
+      </div>
+      <div style="margin-top:14px;background:rgba(var(--accent-rgb),0.06);border-left:3px solid var(--accent);padding:10px 12px;border-radius:0 8px 8px 0;">
+        <p style="font-size:0.82rem;line-height:1.6;">这不是“写一个页面”的测试，而是对应用架构、模型接入、调试与 AI 协作方法的综合考察。</p>
+      </div>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--accent);margin-bottom:12px;">完成进度：50人班级</h4>
+      <div style="display:grid;grid-template-columns:1fr 92px;gap:12px;align-items:center;">
+        <svg viewBox="0 0 420 250" style="width:100%;height:250px;background:rgba(var(--primary-rgb),0.03);border:1px solid var(--border);border-radius:10px;">
+          <line x1="50" y1="205" x2="380" y2="205" stroke="rgba(0,0,0,0.18)" stroke-width="1"/>
+          <line x1="50" y1="30" x2="50" y2="205" stroke="rgba(0,0,0,0.18)" stroke-width="1"/>
+          <line x1="50" y1="170" x2="380" y2="170" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+          <line x1="50" y1="135" x2="380" y2="135" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+          <line x1="50" y1="100" x2="380" y2="100" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+          <line x1="50" y1="65" x2="380" y2="65" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+          <text x="26" y="209" font-size="11" fill="#64748b">0</text>
+          <text x="22" y="139" font-size="11" fill="#64748b">10</text>
+          <text x="22" y="69" font-size="11" fill="#64748b">20</text>
+          <text x="43" y="224" font-size="11" fill="#64748b">20</text>
+          <text x="151" y="224" font-size="11" fill="#64748b">100</text>
+          <text x="262" y="224" font-size="11" fill="#64748b">180</text>
+          <text x="334" y="224" font-size="11" fill="#64748b">分钟</text>
+          <polyline points="50,205 160,191 270,86" fill="none" stroke="var(--primary)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="50" cy="205" r="5" fill="var(--primary)"/>
+          <circle cx="160" cy="191" r="6" fill="var(--green)"/>
+          <circle cx="270" cy="86" r="6" fill="var(--primary)"/>
+          <text x="38" y="194" font-size="13" font-weight="700" fill="var(--primary)">0</text>
+          <text x="150" y="178" font-size="13" font-weight="700" fill="var(--green)">2</text>
+          <text x="258" y="73" font-size="13" font-weight="700" fill="var(--primary)">19</text>
+          <text x="110" y="36" font-size="13" fill="#64748b">累计完成人数</text>
+        </svg>
+        <div style="height:250px;border-radius:10px;background:rgba(var(--accent-rgb),0.08);border:1px solid rgba(var(--accent-rgb),0.18);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px;">
+          <div style="font-size:2.2rem;font-weight:900;color:var(--accent);line-height:1;">31</div>
+          <div style="font-size:0.9rem;color:var(--accent);font-weight:700;margin-top:6px;">人未完成</div>
+          <div style="font-size:0.68rem;opacity:0.65;margin-top:8px;">180分钟课堂结束</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:12px;background:rgba(var(--primary-rgb),0.04);border-radius:8px;">
+        <p style="font-size:0.86rem;line-height:1.7;"><strong style="color:var(--primary);">结论：</strong>影响构建效率的关键几个要素：应用架构思维（程序员的专业能力）、应用调试能力、AI沟通方法、AI工具选择。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s76">
+  <div class="section-header">
+    <span class="section-label">PITFALLS</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>常见陷阱与反模式：生成越快，越要管理风险</h3>
+  <div class="grid-2" style="margin-top:10px;gap:12px;">
+    <div class="card" style="border-left:3px solid var(--red);">
+      <h4 style="font-size:0.8rem;color:var(--red);margin-bottom:4px;">陷阱一：一次给太多需求</h4>
+      <p style="font-size:0.7rem;opacity:0.7;">"做一个有用户系统、支付、聊天、上传、搜索的社交平台" → AI迷失，每样都做不好</p>
+      <p style="font-size:0.68rem;color:var(--green);margin-top:4px;">建议：每次只做一个完整功能</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <h4 style="font-size:0.8rem;color:var(--red);margin-bottom:4px;">陷阱二：不提供上下文</h4>
+      <p style="font-size:0.7rem;opacity:0.7;">"帮我修一下这个bug" → AI不知道你的项目用什么技术栈</p>
+      <p style="font-size:0.68rem;color:var(--green);margin-top:4px;">建议：告诉AI项目类型、框架、相关文件</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <h4 style="font-size:0.8rem;color:var(--red);margin-bottom:4px;">陷阱三：让AI大范围重构</h4>
+      <p style="font-size:0.7rem;opacity:0.7;">"把整个页面重写一下" → 可能引入新bug，丢失已有功能</p>
+      <p style="font-size:0.68rem;color:var(--green);margin-top:4px;">建议：要求“手术式编辑”，只改需要改的部分</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <h4 style="font-size:0.8rem;color:var(--red);margin-bottom:4px;">陷阱四：不验证就继续</h4>
+      <p style="font-size:0.7rem;opacity:0.7;">AI生成代码后直接追加新功能 → 累积的bug最终导致系统崩溃</p>
+      <p style="font-size:0.68rem;color:var(--green);margin-top:4px;">建议：每完成一个功能就验证一次</p>
+    </div>
+  </div>
+  <div class="grid-2" style="margin-top:10px;gap:12px;">
+    <div class="card" style="border-left:3px solid var(--accent);">
+      <h4 style="font-size:0.8rem;color:var(--accent);margin-bottom:4px;">陷阱五：信任AI的“假知识”</h4>
+      <p style="font-size:0.7rem;opacity:0.7;">AI可能"幻觉"出不存在的API、过时的库版本、不安全的实现</p>
+      <p style="font-size:0.68rem;color:var(--green);margin-top:4px;">要求AI给来源、日期和不确定性；关键事实必须人工复核</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent);">
+      <h4 style="font-size:0.8rem;color:var(--accent);margin-bottom:4px;">陷阱六：忽略合规与伦理</h4>
+      <p style="font-size:0.7rem;opacity:0.7;">把学生信息、客户资料、未公开文档直接交给工具 → 可能带来隐私和合规风险</p>
+      <p style="font-size:0.68rem;color:var(--green);margin-top:4px;">先脱敏、再上传；敏感场景使用本地或合规方案</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s77">
+  <div class="section-header">
+    <span class="section-label">EVIDENCE</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>真实趋势：AI协作开发进入主流，但信任正在下降</h3>
+  <div class="grid-2" style="margin-top:10px;gap:14px;">
+    <div class="card card-glow">
+      <h4 style="color:var(--primary);font-size:0.85rem;margin-bottom:8px;">采用率上升</h4>
+      <div style="margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;font-size:0.72rem;margin-bottom:3px;"><span>专业开发者使用或计划使用AI工具</span><span style="color:var(--primary);font-weight:700;">约 84%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:84%;"></div></div>
+      </div>
+      <p style="font-size:0.68rem;opacity:0.6;">Stack Overflow 2025 调查显示，AI工具已经成为开发工作中的常规辅助。</p>
+      <div style="margin-top:8px;">
+        <div style="display:flex;justify-content:space-between;font-size:0.72rem;margin-bottom:3px;"><span>对AI输出“信任”的开发者</span><span style="color:var(--accent);font-weight:700;">明显不足半数</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:33%;background:linear-gradient(90deg,var(--accent),rgba(var(--accent-rgb),0.5));"></div></div>
+      </div>
+      <p style="font-size:0.68rem;opacity:0.6;">同一调查也显示，开发者对AI输出准确性的信任下降，说明“会用”不等于“可放心上线”。</p>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--primary);font-size:0.85rem;margin-bottom:8px;">从“生成代码”到“治理质量”</h4>
+      <div class="grid-2" style="gap:8px;">
+        <div style="text-align:center;padding:8px;background:rgba(var(--primary-rgb),0.06);border-radius:6px;">
+          <div style="font-size:1.3rem;font-weight:900;color:var(--primary);">定义</div>
+          <div style="font-size:0.65rem;opacity:0.6;">目标、场景、数据</div>
+        </div>
+        <div style="text-align:center;padding:8px;background:rgba(var(--accent-rgb),0.06);border-radius:6px;">
+          <div style="font-size:1.3rem;font-weight:900;color:var(--accent);">生成</div>
+          <div style="font-size:0.65rem;opacity:0.6;">原型、代码、文案</div>
+        </div>
+        <div style="text-align:center;padding:8px;background:rgba(var(--primary2-rgb),0.06);border-radius:6px;">
+          <div style="font-size:1.3rem;font-weight:900;color:var(--primary2);">审查</div>
+          <div style="font-size:0.65rem;opacity:0.6;">事实、逻辑、风险</div>
+        </div>
+        <div style="text-align:center;padding:8px;background:rgba(var(--green-rgb),0.06);border-radius:6px;">
+          <div style="font-size:1.3rem;font-weight:900;color:var(--green);">迭代</div>
+          <div style="font-size:0.65rem;opacity:0.6;">反馈、测试、发布</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:10px;padding:10px 14px;">
+    <h4 style="font-size:0.8rem;color:var(--primary);margin-bottom:4px;">典型案例</h4>
+    <div class="grid-2" style="font-size:0.7rem;opacity:0.7;line-height:1.6;">
+      <div><strong style="color:var(--primary);">设计师 → 产品原型：</strong>AI适合快速做可点击样机，但上线前需要工程、可访问性和性能复核。</div>
+      <div><strong style="color:var(--accent);">市场人员 → 内部工具：</strong>AI适合做资料整理和数据清洗工具，但涉及客户数据时要先处理权限与脱敏。</div>
+    </div>
+  </div>
+  <p class="source-tag">来源：Stack Overflow Developer Survey 2025 · Anthropic Economic Index 2025 · NIST GenAI Profile 2024</p>
+</div>
+
+<div class="slide" id="s78">
+  <div class="section-header">
+    <span class="section-label">CASES</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>案例解剖：一个内部工具从想法到可用原型</h3>
+  <p style="font-size:0.75rem;opacity:0.6;margin-bottom:8px;">示例：非技术者用AI构建“资料整理与检索”小工具。重点不是炫技，而是把需求、边界和验收写清。</p>
+  <div style="display:flex;gap:8px;margin-bottom:10px;">
+    <div class="card" style="flex:1;padding:10px;text-align:center;">
+      <div style="font-weight:700;font-size:0.8rem;color:var(--primary);">任务说明</div>
+      <div style="font-size:0.6rem;opacity:0.5;">10分钟</div>
+      <div style="font-size:0.65rem;opacity:0.6;margin-top:4px;">目标、用户、数据、验收</div>
+    </div>
+    <div style="font-size:1.2rem;color:var(--primary);align-self:center;">→</div>
+    <div class="card" style="flex:1;padding:10px;text-align:center;">
+      <div style="font-weight:700;font-size:0.8rem;color:var(--primary);">骨架</div>
+      <div style="font-size:0.6rem;opacity:0.5;">30分钟</div>
+      <div style="font-size:0.65rem;opacity:0.6;margin-top:4px;">上传、列表、搜索、详情</div>
+    </div>
+    <div style="font-size:1.2rem;color:var(--primary);align-self:center;">→</div>
+    <div class="card" style="flex:1;padding:10px;text-align:center;">
+      <div style="font-weight:700;font-size:0.8rem;color:var(--primary);">规则</div>
+      <div style="font-size:0.6rem;opacity:0.5;">20分钟</div>
+      <div style="font-size:0.65rem;opacity:0.6;margin-top:4px;">字段、标签、空状态</div>
+    </div>
+    <div style="font-size:1.2rem;color:var(--primary);align-self:center;">→</div>
+    <div class="card" style="flex:1;padding:10px;text-align:center;">
+      <div style="font-weight:700;font-size:0.8rem;color:var(--primary);">功能</div>
+      <div style="font-size:0.6rem;opacity:0.5;">60分钟</div>
+      <div style="font-size:0.65rem;opacity:0.6;margin-top:4px;">搜索、筛选、导出</div>
+    </div>
+    <div style="font-size:1.2rem;color:var(--primary);align-self:center;">→</div>
+    <div class="card card-glow" style="flex:1;padding:10px;text-align:center;">
+      <div style="font-weight:700;font-size:0.8rem;color:var(--green);">验收</div>
+      <div style="font-size:0.6rem;opacity:0.5;">10分钟</div>
+      <div style="font-size:0.65rem;opacity:0.6;margin-top:4px;">真实数据+边界测试</div>
+    </div>
+  </div>
+  <div class="grid-2" style="gap:12px;">
+    <div class="card">
+      <h4 style="font-size:0.8rem;color:var(--primary);margin-bottom:6px;">关键决策点</h4>
+      <div style="font-size:0.7rem;line-height:1.8;opacity:0.7;">
+        <p>• 第1次迭代：先做静态原型 → 验证流程是否顺</p>
+        <p>• 第2次迭代：加入真实样例数据 → 发现字段缺失</p>
+        <p>• 第3次迭代：补充搜索和标签 → 验证是否找得到资料</p>
+        <p>• 第4次迭代：处理空状态/错误输入 → 接近可用</p>
+      </div>
+    </div>
+    <div class="highlight-box" style="padding:10px;">
+      <p style="font-size:0.75rem;line-height:1.6;"><strong style="color:var(--primary);">更稳妥的交付判断：</strong><br>AI可以把“可运行原型”做得很快，但内部工具是否能投入使用，取决于数据安全、错误处理、使用说明和维护责任。<br><br><strong style="color:var(--accent);">核心启示：</strong>非技术者构建应用的关键不在“完全不懂技术”，而在<strong>能把业务规则讲清楚，并用真实场景验收</strong>。</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s79">
+  <div class="section-header">
+    <span class="section-label">SUMMARY</span>
+    <div class="section-line"></div>
+  </div>
+  <h3>与AI协作构建应用——方法论全景</h3>
+  <div class="grid-2" style="margin-top:10px;gap:12px;">
+    <div class="card card-glow">
+      <h4 style="color:var(--primary);font-size:0.9rem;margin-bottom:8px;">五步方法论</h4>
+      <div style="font-size:0.72rem;line-height:2;">
+        <p><strong style="color:var(--primary);">1. 思维转变：</strong>你管理AI协作流程，而不是许愿</p>
+        <p><strong style="color:var(--primary);">2. 四要素Prompt：</strong>目标+上下文+约束+验收</p>
+        <p><strong style="color:var(--primary);">3. 系统思维：</strong>描述行为，而非屏幕</p>
+        <p><strong style="color:var(--primary);">4. 分层迭代：</strong>骨架→规则→功能→细节</p>
+        <p><strong style="color:var(--primary);">5. 验证闭环：</strong>真实路径+边界输入+风险清单</p>
+      </div>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--primary);font-size:0.9rem;margin-bottom:8px;">核心要点</h4>
+      <div style="background:linear-gradient(135deg,rgba(var(--accent-rgb),0.22),rgba(var(--yellow-rgb),0.16));border:2px solid rgba(var(--accent-rgb),0.55);border-radius:10px;padding:14px 16px;margin-bottom:10px;box-shadow:0 8px 24px rgba(var(--accent-rgb),0.18);">
+        <div style="font-size:1.55rem;font-weight:900;color:var(--accent);line-height:1.2;">模型投入</div>
+        <p style="font-size:0.9rem;line-height:1.55;margin-top:6px;color:#7c2d12;font-weight:700;">为当下优异的、适合该领域任务的 AI 模型服务买单。模型能力本身会大幅提升效果上限。</p>
+      </div>
+      <div style="font-size:0.72rem;line-height:1.8;">
+        <p><strong style="color:var(--accent);">说明先行：</strong>复杂项目先写目标、数据、边界、验收</p>
+        <p><strong style="color:var(--accent);">小步推进：</strong>每次只做一个可检查单元</p>
+        <p><strong style="color:var(--accent);">检查点：</strong>完成即验证，验证即保留稳定版本</p>
+      </div>
+      <div style="margin-top:10px;background:rgba(var(--primary-rgb),0.04);border-radius:6px;padding:8px;text-align:center;">
+        <p style="font-size:0.8rem;color:var(--primary);font-weight:700;">关键公式</p>
+        <p style="font-size:0.72rem;opacity:0.7;line-height:1.6;">清晰意图 + 约束边界 + 真实验证 = 可依赖的AI协作产出</p>
+      </div>
+    </div>
+  </div>
+  <div class="grid-2" style="margin-top:10px;gap:12px;">
+    <div class="card" style="border-left:3px solid var(--green);">
+      <h4 style="font-size:0.8rem;color:var(--green);margin-bottom:4px;">非技术者的真实优势</h4>
+      <p style="font-size:0.7rem;opacity:0.7;line-height:1.5;">你更接近真实业务、真实用户和真实约束。把这些说清楚，AI才有可能生成真正有用的东西。</p>
+    </div>
+    <div class="highlight-box" style="padding:10px;text-align:center;">
+      <p style="font-size:0.85rem;line-height:1.6;"><strong style="color:var(--primary);">容易误解的一句话：</strong><br>"AI会帮我把想法直接变成可靠产品"<br><br><strong style="color:var(--accent);">更准确的说法：</strong><br>"AI可以加速原型，可靠性来自人的约束、验证和责任"</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide flex-center" id="s80">
+  <div>
+    <div class="data-badge" style="margin-bottom:20px;">SUMMARY</div>
+    <h1 style="font-size:3rem;">意图即代码</h1>
+    <div style="max-width:700px;margin:30px auto;line-height:2.2;font-size:1.05rem;opacity:0.8;">
+      <p>在生成式AI时代，<strong style="color:var(--primary);">清晰意图是新的生产力接口</strong></p>
+      <p>AI可以加速表达、原型和执行，</p>
+      <p>但可靠成果来自<strong style="color:var(--accent);">专业判断、边界约束和持续验证</strong></p>
+    </div>
+    <div style="margin-top:40px;display:flex;gap:20px;justify-content:center;">
+      <div style="text-align:center;padding:16px 24px;background:rgba(var(--primary-rgb),0.05);border-radius:12px;">
+        <div style="font-size:0.8rem;opacity:0.5;">核心能力</div>
+        <div style="font-weight:600;color:var(--primary);">清晰定义问题</div>
+      </div>
+      <div style="text-align:center;padding:16px 24px;background:rgba(var(--green-rgb),0.05);border-radius:12px;">
+        <div style="font-size:0.8rem;opacity:0.5;">协作模式</div>
+        <div style="font-weight:600;color:var(--green);">小步迭代验证</div>
+      </div>
+      <div style="text-align:center;padding:16px 24px;background:rgba(var(--primary2-rgb),0.05);border-radius:12px;">
+        <div style="font-size:0.8rem;opacity:0.5;">最终目标</div>
+        <div style="font-weight:600;color:var(--primary2);">原型→可用</div>
+      </div>
+    </div>
+    <div style="margin-top:50px;opacity:0.5;font-size:0.9rem;">
+      <p>主讲人：张随雨 | 媒体工程学院人工智能专业教师</p>
+      <p style="margin-top:6px;opacity:0.6;">感谢聆听 · 欢迎交流</p>
+    </div>
+  </div>
+</div>
+
+<div class="nav-container">
+  <div class="chapter-nav">
+    <div class="chapter-dot" onclick="goToChapter(0)" title="封面">0</div>
+    <div class="chapter-dot" onclick="goToChapter(2)" title="AI基础概念">1</div>
+    <div class="chapter-dot" onclick="goToChapter(8)" title="国内大模型">2</div>
+    <div class="chapter-dot" onclick="goToChapter(14)" title="Token经济">3</div>
+    <div class="chapter-dot" onclick="goToChapter(20)" title="传媒行业变革">4</div>
+    <div class="chapter-dot" onclick="goToChapter(31)" title="出版AI实践">5</div>
+    <div class="chapter-dot" onclick="goToChapter(43)" title="从业者机遇">6</div>
+    <div class="chapter-dot" onclick="goToChapter(51)" title="AI案例专题">7</div>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="prevSlide()">← 上一页</button>
+    <div class="slide-number" id="slideNum">1 / 80</div>
+    <button class="nav-btn" onclick="nextSlide()">下一页 →</button>
+  </div>
+</div>
+<script>
+
+(function(){
+  var canvas = document.getElementById('bgCanvas');
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var w, h;
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  var slidesContainer = document.getElementById('slides-container');
+  var fontSize = parseInt(localStorage.getItem('slideFontSize')) || 100;
+  document.documentElement.style.fontSize = fontSize + '%';
+  
+  function updateScale() {
+    var scaleX = window.innerWidth / 1280;
+    var scaleY = window.innerHeight / 960;
+    var scale = Math.min(scaleX, scaleY);
+    slidesContainer.style.transform = 'translate(-50%, -50%) scale(' + scale + ')';
+  }
+  updateScale();
+  window.addEventListener('resize', updateScale);
+
+  for (var i = 0; i < 60; i++) {
+    particles.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      r: Math.random() * 1.5 + 0.5,
+      alpha: Math.random() * 0.5 + 0.1
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(26,86,219,' + (p.alpha * 0.12) + ')';
+      ctx.fill();
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0 || p.x > w) p.vx *= -1;
+      if (p.y < 0 || p.y > h) p.vy *= -1;
+    }
+
+    for (var i = 0; i < particles.length; i++) {
+      for (var j = i + 1; j < particles.length; j++) {
+        var dx = particles[i].x - particles[j].x;
+        var dy = particles[i].y - particles[j].y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = 'rgba(26,86,219,' + (0.03 * (1 - dist / 100)) + ')';
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  var modal = document.getElementById('fullscreen-modal');
+  var modalInner = document.getElementById('modal-inner');
+  var closeBtn = modal.querySelector('.close-btn');
+
+  function openModal(content, isImage) {
+    if (isImage) {
+      modalInner.innerHTML = '<div class="img-wrapper" id="imgWrapper"></div>';
+      modalInner.querySelector('#imgWrapper').innerHTML = content;
+      var modalImg = modalInner.querySelector('#imgWrapper img');
+      modalImg.addEventListener('click', function(e) {
+        e.stopPropagation();
+        closeModal();
+      });
+    } else {
+      modalInner.innerHTML = content;
+      var modalContent = modalInner.querySelector('.modal-content') || modalInner.firstChild;
+      if (modalContent) {
+        modalContent.addEventListener('click', function(e) {
+          e.stopPropagation();
+          closeModal();
+        });
+      }
+    }
+    modal.classList.add('active');
+  }
+
+  function closeModal() {
+    modal.classList.remove('active');
+    modalInner.innerHTML = '';
+  }
+
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal || e.target === closeBtn || e.target === modalInner) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  var clickableImages = document.querySelectorAll('img.clickable');
+  for (var i = 0; i < clickableImages.length; i++) {
+    clickableImages[i].addEventListener('click', function(e) {
+      e.stopPropagation();
+      var imgSrc = this.src;
+      var imgAlt = this.alt || '';
+      openModal('<img src="' + imgSrc + '" alt="' + imgAlt + '">', true);
+    });
+  }
+
+  var conceptHierarchy = document.getElementById('concept-hierarchy');
+  if (conceptHierarchy) {
+    conceptHierarchy.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var clone = this.cloneNode(true);
+      clone.style.width = '100%';
+      clone.style.maxWidth = 'none';
+      clone.style.padding = '20px 40px';
+      clone.style.background = 'transparent';
+      clone.querySelectorAll('.concept-box').forEach(function(box) {
+        box.style.fontSize = '1.1rem';
+        box.style.padding = '16px 20px';
+      });
+      clone.querySelectorAll('.cn').forEach(function(cn) {
+        cn.style.fontSize = '1.3rem';
+      });
+      clone.querySelectorAll('.connector-v').forEach(function(c) {
+        c.style.height = '20px';
+      });
+      openModal(clone.outerHTML, false);
+    });
+  }
+
+  function makeCardClickable(selector) {
+    var cards = document.querySelectorAll(selector);
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].classList.add('clickable');
+      cards[i].addEventListener('click', function(e) {
+        e.stopPropagation();
+        var clone = this.cloneNode(true);
+        clone.style.width = '100%';
+        clone.style.maxWidth = 'none';
+        clone.style.padding = '24px';
+        clone.style.background = 'var(--surface)';
+        clone.style.borderRadius = '12px';
+        clone.style.boxShadow = 'none';
+        openModal('<div class="modal-content">' + clone.outerHTML + '</div>', false);
+      });
+    }
+  }
+
+  makeCardClickable('#s5 .grid-2 > .card');
+  makeCardClickable('#s6 .grid-2 > .card');
+  makeCardClickable('#s8 .grid-2 > .card-glow');
+  makeCardClickable('#s8 .grid-2 > div[style*="flex-direction:column"]');
+  makeCardClickable('#s9 .grid-2 > .card');
+  makeCardClickable('#s10 .grid-2 > .card');
+
+  var slides = document.querySelectorAll('.slide');
+  var totalSlides = 80;
+  var slideNumEl = document.getElementById('slideNum');
+  
+  var hash = window.location.hash;
+  var currentSlide = hash ? parseInt(hash.substring(1)) - 1 : 0;
+  currentSlide = isNaN(currentSlide) || currentSlide < 0 || currentSlide >= totalSlides ? 0 : currentSlide;
+  
+  slides[currentSlide].classList.add('active');
+  slideNumEl.textContent = (currentSlide + 1) + ' / ' + totalSlides;
+  updateChapterDots();
+  setTimeout(function() { triggerAnimations(slides[currentSlide]); }, 100);
+  
+  function triggerAnimations(slideEl) {
+    var allAnimatedElements = slideEl.querySelectorAll('.chart-bar, .progress-fill, .bar, .concept-box-animate');
+    
+    allAnimatedElements.forEach(function(el) {
+      el.classList.remove('animate');
+    });
+    
+    void slideEl.offsetWidth;
+    
+    allAnimatedElements.forEach(function(el) {
+      el.classList.add('animate');
+    });
+  }
+
+  window.addEventListener('popstate', function(e) {
+    if (e.state && e.state.slide !== undefined) {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = e.state.slide;
+      slides[currentSlide].classList.add('active');
+      slideNumEl.textContent = (currentSlide + 1) + ' / ' + totalSlides;
+      window.scrollTo(0, 0);
+      triggerAnimations(slides[currentSlide]);
+    }
+  });
+
+  function showSlide(n) {
+    slides[currentSlide].classList.remove('active');
+    currentSlide = (n + totalSlides) % totalSlides;
+    slides[currentSlide].classList.add('active');
+    slideNumEl.textContent = (currentSlide + 1) + ' / ' + totalSlides;
+    window.scrollTo(0, 0);
+    history.pushState({ slide: currentSlide }, '', '#' + (currentSlide + 1));
+    triggerAnimations(slides[currentSlide]);
+    updateChapterDots();
+  }
+
+  function updateChapterDots() {
+    var dots = document.querySelectorAll('.chapter-dot');
+    var chapterStarts = [0, 2, 8, 14, 20, 31, 43, 51];
+    for (var i = 0; i < dots.length; i++) {
+      var nextStart = chapterStarts[i + 1] !== undefined ? chapterStarts[i + 1] : totalSlides;
+      if (currentSlide >= chapterStarts[i] && currentSlide < nextStart) {
+        dots[i].classList.add('active');
+      } else {
+        dots[i].classList.remove('active');
+      }
+    }
+  }
+
+  window.goToChapter = function(n) {
+    showSlide(n);
+  };
+
+  window.nextSlide = function() { showSlide(currentSlide + 1); };
+  window.prevSlide = function() { showSlide(currentSlide - 1); };
+
+  function adjustFontSize(delta) {
+    fontSize = Math.min(Math.max(fontSize + delta, 90), 200);
+    document.documentElement.style.fontSize = fontSize + '%';
+    localStorage.setItem('slideFontSize', fontSize);
+  }
+  
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      nextSlide();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.key === '+' || (e.key === '=' && e.shiftKey)) {
+      e.preventDefault();
+      adjustFontSize(5);
+    } else if (e.key === '-' || e.key === '_') {
+      e.preventDefault();
+      adjustFontSize(-5);
+    } else if (e.key === '0' && !e.shiftKey) {
+      e.preventDefault();
+      fontSize = 100;
+      document.documentElement.style.fontSize = '100%';
+      localStorage.setItem('slideFontSize', 100);
+    }
+  });
+
+  var touchStartX = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+  });
+  document.addEventListener('touchend', function(e) {
+    var diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) nextSlide();
+      else prevSlide();
+    }
+  });
+})();
+
+</script>
+</body>
+</html>
